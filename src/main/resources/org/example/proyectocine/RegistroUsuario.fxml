@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15.0" prefWidth="720.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.RegistroUsuarioViewController">
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
+
+    <Label text="Registro de usuarios" styleClass="titulo"/>
+
+    <!-- Formulario -->
+    <VBox spacing="15.0" styleClass="tarjeta">
+        <HBox spacing="20.0" alignment="CENTER_LEFT">
+            <Label text="Tipo de usuario:" styleClass="subtitulo"/>
+            <RadioButton fx:id="rbCliente" text="Cliente" selected="true">
+                <toggleGroup>
+                    <ToggleGroup fx:id="tgTipo"/>
+                </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbAdmin" text="Administrador" toggleGroup="$tgTipo"/>
+        </HBox>
+
+        <GridPane hgap="10.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints minWidth="150.0"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtNombre" promptText="Nombre completo" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Correo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtCorreo" promptText="correo@ejemplo.com" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Contraseña:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="txtClave" promptText="Contraseña" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Confirmar contraseña:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="txtConfirmarClave" promptText="Repite la contraseña" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <!-- Cambia entre "Cédula" (cliente) y "Código" (admin) -->
+            <Label fx:id="lblIdentificacion" text="Cédula:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtIdentificacion" promptText="Número de cédula" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Label fx:id="lblMensaje" wrapText="true"/>
+
+        <HBox spacing="10.0">
+            <Button text="Registrar" defaultButton="true" onAction="#onRegistrar" styleClass="boton-principal"/>
+            <Button text="Limpiar" onAction="#onLimpiar"/>
+            <Button text="Volver" cancelButton="true" onAction="#onVolver"/>
+        </HBox>
+    </VBox>
+
+    <!-- Usuarios ya registrados -->
+    <Label text="Usuarios registrados" styleClass="subtitulo"/>
+    <TableView fx:id="tblUsuarios" prefHeight="220.0">
+        <columns>
+            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="120.0"/>
+            <TableColumn fx:id="colNombre" text="Nombre" prefWidth="190.0"/>
+            <TableColumn fx:id="colCorreo" text="Correo" prefWidth="220.0"/>
+            <TableColumn fx:id="colIdentificacion" text="Cédula / Código" prefWidth="130.0"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <placeholder>
+            <Label text="Todavía no hay usuarios registrados"/>
+        </placeholder>
+    </TableView>
+</VBox>

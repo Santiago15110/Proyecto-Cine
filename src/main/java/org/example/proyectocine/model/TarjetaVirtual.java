@@ -1,35 +1,22 @@
 package org.example.proyectocine.model;
 
-/**
- * Tarjeta virtual de un cliente, con un saldo que se puede recargar y usar para pagar.
- * Se crea automáticamente al crear el {@link Cliente} y su número es la cédula del cliente.
- */
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+
 public class TarjetaVirtual {
 
-    /**
-     * Número de la tarjeta (la cédula del cliente).
-     */
     private String numero;
-
-    /**
-     * Saldo disponible en la tarjeta.
-     */
     private double saldo;
-
-    /**
-     * Cliente dueño de la tarjeta.
-     */
     private Cliente theCliente;
+    private ArrayList<MovimientoSaldo> listMovimientos;
 
-    /**
-     * Crea la tarjeta de un cliente con saldo en 0.
-     *
-     * @param theCliente cliente dueño de la tarjeta
-     */
+
     public TarjetaVirtual(Cliente theCliente) {
         this.numero = theCliente.getCedula();
         this.theCliente = theCliente;
         this.saldo = 0;
+        listMovimientos = new ArrayList<>();
     }
 
     /**
@@ -42,7 +29,11 @@ public class TarjetaVirtual {
             throw new IllegalArgumentException("El monto a recargar debe ser mayor a 0");
         }
         saldo += monto;
+        listMovimientos.add(new MovimientoSaldo(TipoMovimiento.RECARGA, monto, LocalDate.now(), LocalTime.now(), saldo, "Se realizo una recarga"));
     }
+
+
+
 
     /**
      * Descuenta dinero del saldo de la tarjeta, por ejemplo al pagar una compra.
@@ -58,32 +49,40 @@ public class TarjetaVirtual {
             throw new IllegalArgumentException("Saldo insuficiente");
         }
         saldo -= monto;
+        listMovimientos.add(new MovimientoSaldo(TipoMovimiento.PAGO, monto, LocalDate.now(),LocalTime.now(), saldo, "Se realizo un pago"));
     }
 
+
     /**
-     * Obtiene el número de la tarjeta.
-     *
-     * @return el número de la tarjeta
+     * Metodo para el reembolso
+     * @param monto
+     * @param descripcion
      */
+    public void reembolsar(double monto, String descripcion){
+
+        if(monto<=0){
+            throw new IllegalArgumentException("El monto debe ser mayor a 0");
+        }
+
+        saldo += monto;
+        listMovimientos.add(new MovimientoSaldo(TipoMovimiento.REEMBOLSO, monto, LocalDate.now(), LocalTime.now(), saldo, descripcion));
+    }
+
+
+
     public String getNumero() {
         return numero;
     }
 
-    /**
-     * Obtiene el saldo disponible.
-     *
-     * @return el saldo actual
-     */
     public double getSaldo() {
         return saldo;
     }
 
-    /**
-     * Obtiene el cliente dueño de la tarjeta.
-     *
-     * @return el cliente
-     */
     public Cliente getTheCliente() {
         return theCliente;
+    }
+
+    public ArrayList<MovimientoSaldo> getListMovimientos() {
+        return listMovimientos;
     }
 }

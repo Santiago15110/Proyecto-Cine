@@ -10,20 +10,10 @@ import java.util.ArrayList;
  */
 public class Cine {
 
-    /**
-     * Única instancia del cine (Singleton).
-     */
     private static Cine instancia;
 
-    /**
-     * Usuarios registrados en el sistema (clientes y administradores).
-     */
     private final ArrayList<Usuario> usuarios = new ArrayList<>();
 
-    /**
-     * Constructor privado para que no se puedan crear otras instancias.
-     * Usar {@link #getInstancia()}.
-     */
     private Cine() {
     }
 
@@ -126,11 +116,6 @@ public class Cine {
         return null;
     }
 
-    /**
-     * Obtiene la lista de usuarios registrados.
-     *
-     * @return la lista de usuarios
-     */
     public ArrayList<Usuario> getUsuarios() {
         return usuarios;
     }

@@ -9,24 +9,12 @@ import java.time.LocalDate;
  */
 public class AcumulacionPunto {
 
-    /**
-     * Puntos acumulados en el periodo actual.
-     */
     private int puntos;
 
-    /**
-     * Fecha en que empezó el periodo actual.
-     */
     private LocalDate fechaInicio;
 
-    /**
-     * Fecha en que vence el periodo actual (un año después del inicio).
-     */
     private LocalDate fechaVencimiento;
 
-    /**
-     * Cliente dueño de los puntos.
-     */
     private Cliente theCliente;
 
     /**
@@ -104,29 +92,14 @@ public class AcumulacionPunto {
         return estaVencida() ? 0 : puntos;
     }
 
-    /**
-     * Obtiene el cliente dueño de los puntos.
-     *
-     * @return el cliente
-     */
     public Cliente getTheCliente() {
         return theCliente;
     }
 
-    /**
-     * Obtiene la fecha de vencimiento del periodo actual.
-     *
-     * @return la fecha de vencimiento
-     */
     public LocalDate getFechaVencimiento() {
         return fechaVencimiento;
     }
 
-    /**
-     * Obtiene la fecha de inicio del periodo actual.
-     *
-     * @return la fecha de inicio
-     */
     public LocalDate getFechaInicio() {
         return fechaInicio;
     }
