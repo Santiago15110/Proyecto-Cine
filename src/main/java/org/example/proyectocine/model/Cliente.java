@@ -1,6 +1,10 @@
 package org.example.proyectocine.model;
 
-public class Cliente extends Usuario {
+import javafx.beans.binding.ObjectExpression;
+
+import java.util.ArrayList;
+
+public class Cliente extends Usuario implements Observador {
 
 
     private String cedula;
@@ -10,6 +14,7 @@ public class Cliente extends Usuario {
 
 
     private AcumulacionPunto theAcumulacion;
+    private final ArrayList<String> listNotificaciones = new ArrayList<>();
 
     /**
      * Crea un cliente junto con su tarjeta virtual y su acumulación de puntos.
@@ -26,6 +31,18 @@ public class Cliente extends Usuario {
         this.theAcumulacion = new AcumulacionPunto(this);
     }
 
+
+    @Override
+    public void actualizar(TipoEvento evento, Object dato){
+        if(evento == TipoEvento.FUNCION_CANCELADA){
+            Funcion f = (Funcion) dato;
+            listNotificaciones.add("La funcion de " + f.getPelicula().getTitulo() + " del " + f.getFechaHora() + " fue cancelada. se reembolso tu dinero");
+        }
+    }
+
+    public ArrayList<String> getListNotificaciones() {
+        return listNotificaciones;
+    }
 
     public String getCedula() {
         return cedula;

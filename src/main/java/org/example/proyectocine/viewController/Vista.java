@@ -1,9 +1,6 @@
 package org.example.proyectocine.viewController;
 
-/**
- * Pantallas de la aplicación, con su archivo FXML y el título de la ventana.
- * Para agregar una pantalla nueva, solo se agrega una constante aquí.
- */
+
 public enum Vista {
 
     INICIO("PaginaInicio.fxml", "Cine"),

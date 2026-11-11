@@ -12,7 +12,11 @@ public class Cine {
 
     private static Cine instancia;
 
-    private final ArrayList<Usuario> usuarios = new ArrayList<>();
+    private final ArrayList<Usuario> listUsuarios = new ArrayList<>();
+    private final ArrayList<Funcion> listFunciones = new ArrayList<>();
+    private final ArrayList<Sala> listSalas = new ArrayList<>();
+    private final ArrayList<Pelicula> listPeliculas = new ArrayList<>();
+    private final ArrayList<Compra> listCompras = new ArrayList<>();
 
     private Cine() {
     }
@@ -45,7 +49,7 @@ public class Cine {
         validarCorreoDisponible(correo);
         validarCedulaDisponible(cedula);
         Cliente cliente = new Cliente(nombre, correo, clave, cedula);
-        usuarios.add(cliente);
+        listUsuarios.add(cliente);
         return cliente;
     }
 
@@ -64,7 +68,7 @@ public class Cine {
         validarCampos(nombre, correo, clave, codigo);
         validarCorreoDisponible(correo);
         Admin admin = new Admin(nombre, correo, clave, codigo);
-        usuarios.add(admin);
+        listUsuarios.add(admin);
         return admin;
     }
 
@@ -90,7 +94,7 @@ public class Cine {
      * @return el usuario encontrado, o {@code null} si no existe
      */
     public Usuario buscarUsuarioPorCorreo(String correo) {
-        for (Usuario u : usuarios) {
+        for (Usuario u : listUsuarios) {
             if (u.getCorreo().equalsIgnoreCase(correo)) {
                 return u;
             }
@@ -105,7 +109,7 @@ public class Cine {
      * @return el cliente encontrado, o {@code null} si no existe
      */
     public Cliente buscarClientePorCedula(String cedula) {
-        for (Usuario u : usuarios) {
+        for (Usuario u : listUsuarios) {
             if (u instanceof Cliente) {
                 Cliente c = (Cliente) u;
                 if (c.getCedula().equals(cedula)) {
@@ -117,7 +121,109 @@ public class Cine {
     }
 
     public ArrayList<Usuario> getUsuarios() {
-        return usuarios;
+        return listUsuarios;
+    }
+
+    /**
+     * Agrega una película al catálogo.
+     *
+     * @param pelicula película a agregar
+     * @throws CinemaException si ya existe una película con el mismo id
+     */
+    public void agregarPelicula(Pelicula pelicula) {
+        if (buscarPelicula(pelicula.getId()) != null) {
+            throw new CinemaException("Ya existe una película con el id " + pelicula.getId());
+        }
+        listPeliculas.add(pelicula);
+    }
+
+    public Pelicula buscarPelicula(String id) {
+        for (Pelicula p : listPeliculas) {
+            if (p.getId().equals(id)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Pelicula> getPeliculas() {
+        return listPeliculas;
+    }
+
+    public ArrayList<Usuario> getListUsuarios() {
+        return listUsuarios;
+    }
+
+    public ArrayList<Funcion> getListFunciones() {
+        return listFunciones;
+    }
+
+    public ArrayList<Sala> getListSalas() {
+        return listSalas;
+    }
+
+    public ArrayList<Pelicula> getListPeliculas() {
+        return listPeliculas;
+    }
+
+    public ArrayList<Compra> getListCompras() {
+        return listCompras;
+    }
+
+    /**
+     * Agrega una sala al cine.
+     *
+     * @param sala sala a agregar
+     * @throws CinemaException si ya existe una sala con el mismo id
+     */
+    public void agregarSala(Sala sala) {
+        if (buscarSala(sala.getId()) != null) {
+            throw new CinemaException("Ya existe una sala con el id " + sala.getId());
+        }
+        listSalas.add(sala);
+    }
+
+    public Sala buscarSala(String id) {
+        for (Sala s : listSalas) {
+            if (s.getId().equals(id)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Sala> getSalas() {
+        return listSalas;
+    }
+
+    /**
+     * Agrega una función a la programación.
+     *
+     * @param funcion función a agregar
+     * @throws CinemaException si ya existe una función con el mismo id
+     */
+    public void agregarFuncion(Funcion funcion) {
+        if (buscarFuncion(funcion.getId()) != null) {
+            throw new CinemaException("Ya existe una función con el id " + funcion.getId());
+        }
+        listFunciones.add(funcion);
+    }
+
+    public Funcion buscarFuncion(String id) {
+        for (Funcion f : listFunciones) {
+            if (f.getId().equals(id)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Funcion> getFunciones() {
+        return listFunciones;
+    }
+
+    public ArrayList<Compra> getCompras() {
+        return listCompras;
     }
 
 
@@ -125,11 +231,11 @@ public class Cine {
      * Verifica que el correo no esté registrado.
      *
      * @param correo correo a verificar
-     * @throws IllegalArgumentException si ya existe un usuario con ese correo
+     * @throws UsuarioExistenteException si ya existe un usuario con ese correo
      */
     private void validarCorreoDisponible(String correo) {
         if (buscarUsuarioPorCorreo(correo) != null) {
-            throw new IllegalArgumentException("Ya existe un usuario con el correo " + correo);
+            throw new UsuarioExistenteException("Ya existe un usuario con el correo " + correo);
         }
     }
 
@@ -137,11 +243,11 @@ public class Cine {
      * Verifica que la cédula no esté registrada.
      *
      * @param cedula cédula a verificar
-     * @throws IllegalArgumentException si ya existe un cliente con esa cédula
+     * @throws UsuarioExistenteException si ya existe un cliente con esa cédula
      */
     private void validarCedulaDisponible(String cedula) {
         if (buscarClientePorCedula(cedula) != null) {
-            throw new IllegalArgumentException("Ya existe un cliente con la cedula " + cedula);
+            throw new UsuarioExistenteException("Ya existe un cliente con la cedula " + cedula);
         }
     }
 
