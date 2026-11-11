@@ -1,4 +1,4 @@
-package org.example.proyectocine;
+package org.example.proyectocine.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

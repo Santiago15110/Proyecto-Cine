@@ -1,4 +1,5 @@
-package org.example.proyectocine;
+package org.example.proyectocine.model;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

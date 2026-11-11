@@ -1,4 +1,4 @@
-package org.example.proyectocine;
+package org.example.proyectocine.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -15,11 +15,11 @@ public class Funcion {
     private final LocalDateTime fechaHora;
     private final int duracionMin;
     private final double precioBase;
-    private EstadoFuncion estado;
+    private boolean cancelada;
     private final Set<Asiento> asientosOcupados;
 
     /**
-     * Crea una función programada, sin asientos ocupados
+     * Crea una función activa, sin asientos ocupados
      * @param id identificador de la función
      * @param pelicula película que se proyecta
      * @param sala sala de proyección
@@ -47,7 +47,7 @@ public class Funcion {
         this.fechaHora = fechaHora;
         this.duracionMin = duracionMin;
         this.precioBase = precioBase;
-        this.estado = EstadoFuncion.PROGRAMADA;
+        this.cancelada = false;
         this.asientosOcupados = new HashSet<>();
     }
 
@@ -58,7 +58,7 @@ public class Funcion {
      */
     public boolean estaDisponible(Asiento a) {
         return a != null
-                && estado == EstadoFuncion.PROGRAMADA
+                && !cancelada
                 && a.isHabilitado()
                 && sala.getAsientos().contains(a)
                 && !asientosOcupados.contains(a);
@@ -108,15 +108,14 @@ public class Funcion {
     }
 
     /**
-     * Cancela la función si está programada
-     * @throws CancelacionNoPermitidaException si ya está cancelada o finalizada
+     * Cancela la función
+     * @throws CancelacionNoPermitidaException si ya estaba cancelada
      */
     public void cancelar() {
-        if (estado != EstadoFuncion.PROGRAMADA) {
-            throw new CancelacionNoPermitidaException(
-                    "La función " + id + " no se puede cancelar porque está " + estado);
+        if (cancelada) {
+            throw new CancelacionNoPermitidaException("La función " + id + " ya está cancelada");
         }
-        estado = EstadoFuncion.CANCELADA;
+        cancelada = true;
     }
 
     public String getId() {
@@ -143,8 +142,8 @@ public class Funcion {
         return precioBase;
     }
 
-    public EstadoFuncion getEstado() {
-        return estado;
+    public boolean isCancelada() {
+        return cancelada;
     }
 
     public Set<Asiento> getAsientosOcupados() {

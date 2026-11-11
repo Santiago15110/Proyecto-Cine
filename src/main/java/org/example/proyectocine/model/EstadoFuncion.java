@@ -1,4 +1,4 @@
-package org.example.proyectocine;
+package org.example.proyectocine.model;
 
 public enum EstadoFuncion {
     PROGRAMADA,

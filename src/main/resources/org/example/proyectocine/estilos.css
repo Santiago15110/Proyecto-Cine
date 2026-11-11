@@ -1,0 +1,132 @@
+/* ===== Estilos generales del cine ===== */
+
+.raiz {
+    -fx-background-color: #f4f5f7;
+    -fx-font-family: "Segoe UI", "Arial";
+    -fx-font-size: 13px;
+}
+
+.titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b71c1c;
+}
+
+.subtitulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Recuadro blanco donde va el formulario */
+.tarjeta {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 10, 0, 0, 3);
+}
+
+/* Tarjeta virtual (recuadro rojo tipo tarjeta) */
+.tarjeta-virtual {
+    -fx-background-color: linear-gradient(to bottom right, #b71c1c, #e53935);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 12, 0, 0, 4);
+}
+
+.tarjeta-virtual .label {
+    -fx-text-fill: white;
+}
+
+.dato-grande {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.dato-mediano {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.dato-pequeno {
+    -fx-font-size: 12px;
+    -fx-opacity: 0.85;
+}
+
+.texto-acento {
+    -fx-text-fill: #b71c1c;
+}
+
+/* ===== Campos de texto ===== */
+
+.text-field, .password-field {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #cccccc;
+    -fx-background-color: white;
+    -fx-padding: 7 10;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #b71c1c;
+}
+
+/* ===== Botones ===== */
+
+.button {
+    -fx-background-radius: 6;
+    -fx-padding: 8 18;
+    -fx-cursor: hand;
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #333333;
+}
+
+.button:hover {
+    -fx-background-color: #d0d0d0;
+}
+
+/* Botón principal (Registrar) */
+.boton-principal {
+    -fx-background-color: #b71c1c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.boton-principal:hover {
+    -fx-background-color: #8e1515;
+}
+
+/* ===== Mensajes ===== */
+
+.mensaje-error {
+    -fx-text-fill: #c0392b;
+}
+
+.mensaje-exito {
+    -fx-text-fill: #1e8449;
+}
+
+/* ===== Tabla ===== */
+
+.table-view {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #dddddd;
+}
+
+.table-view .column-header {
+    -fx-background-color: #b71c1c;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #f8d7d7;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: #333333;
+}
