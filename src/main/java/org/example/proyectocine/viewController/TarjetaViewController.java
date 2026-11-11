@@ -18,10 +18,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-/**
- * Controlador de la pantalla TarjetaVirtual.fxml.
- * Muestra el saldo, los puntos y los movimientos del cliente, y permite recargar.
- */
+
 public class TarjetaViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
