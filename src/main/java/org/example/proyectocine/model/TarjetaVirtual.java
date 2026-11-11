@@ -39,14 +39,14 @@ public class TarjetaVirtual {
      * Descuenta dinero del saldo de la tarjeta, por ejemplo al pagar una compra.
      * @param monto valor a descontar
      * @throws IllegalArgumentException si el monto es menor o igual a 0
-     *                                  o si es mayor que el saldo disponible
+     * @throws SaldoInsuficienteException si el monto es mayor que el saldo disponible
      */
     public void descontar(double monto) {
         if (monto <= 0) {
             throw new IllegalArgumentException("El monto a descontar debe ser mayor a 0");
         }
         if (monto > saldo) {
-            throw new IllegalArgumentException("Saldo insuficiente");
+            throw new SaldoInsuficienteException("Saldo insuficiente");
         }
         saldo -= monto;
         listMovimientos.add(new MovimientoSaldo(TipoMovimiento.PAGO, monto, LocalDate.now(),LocalTime.now(), saldo, "Se realizo un pago"));

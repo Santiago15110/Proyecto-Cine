@@ -1,4 +1,4 @@
-package org.example.proyectocine.model;
+package org.example.proyectocine;
 
 import javafx.application.Application;
 

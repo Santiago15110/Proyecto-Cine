@@ -2,12 +2,9 @@ package org.example.proyectocine.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-public class Funcion {
+public class Funcion implements Sujeto {
 
     private final String id;
     private final Pelicula pelicula;
@@ -17,6 +14,7 @@ public class Funcion {
     private final double precioBase;
     private boolean cancelada;
     private final Set<Asiento> asientosOcupados;
+    private final ArrayList<Observador> listObservadores = new ArrayList<>();
 
     /**
      * Crea una función activa, sin asientos ocupados
@@ -170,4 +168,28 @@ public class Funcion {
     public String toString() {
         return pelicula.getTitulo() + " - " + sala.getNombre() + " - " + fechaHora;
     }
+
+
+
+    @Override
+    public void agregarObservador(Observador o){
+        if(!listObservadores.contains(o)){
+            listObservadores.add(o);
+        }
+    }
+
+
+    @Override
+    public void eliminarObservador(Observador o){
+        listObservadores.remove(o);
+    }
+
+
+    @Override
+    public void notificarObservador(TipoEvento evento, Object dato){
+        for(Observador o: listObservadores){
+            o.actualizar(evento,dato);
+        }
+    }
+
 }

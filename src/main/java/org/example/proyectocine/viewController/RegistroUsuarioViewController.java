@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import org.example.proyectocine.controller.RegistroUsuarioController;
+import org.example.proyectocine.model.CinemaException;
 import org.example.proyectocine.model.Usuario;
 
 /**
@@ -91,7 +92,7 @@ public class RegistroUsuarioViewController {
             }
             limpiarCampos();
             refrescarTabla();
-        } catch (IllegalArgumentException e) {
+        } catch (CinemaException | IllegalArgumentException e) {
             mostrarError(e.getMessage());
         }
     }

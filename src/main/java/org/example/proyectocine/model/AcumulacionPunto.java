@@ -57,19 +57,18 @@ public class AcumulacionPunto {
      * Redime (gasta) puntos del cliente.
      *
      * @param cantidad puntos a redimir
-     * @throws IllegalArgumentException si la cantidad es menor o igual a 0
-     *                                  o si es mayor que los puntos disponibles
-     * @throws IllegalStateException    si los puntos están vencidos
+     * @throws IllegalArgumentException     si la cantidad es menor o igual a 0
+     * @throws PuntosInsuficientesException si los puntos están vencidos o no alcanzan
      */
     public void redimirPuntos(int cantidad) {
         if (cantidad <= 0) {
             throw new IllegalArgumentException("La cantidad de puntos debe ser mayor a 0");
         }
         if (estaVencida()) {
-            throw new IllegalStateException("Los puntos están vencidos");
+            throw new PuntosInsuficientesException("Los puntos están vencidos");
         }
         if (cantidad > puntos) {
-            throw new IllegalArgumentException("Puntos insuficientes");
+            throw new PuntosInsuficientesException("Puntos insuficientes");
         }
         puntos -= cantidad;
     }

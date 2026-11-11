@@ -1,24 +1,23 @@
 package org.example.proyectocine.controller;
 
 import org.example.proyectocine.model.AcumulacionPunto;
-import org.example.proyectocine.model.Cine;
+import org.example.proyectocine.model.CineFacade;
 import org.example.proyectocine.model.Cliente;
 import org.example.proyectocine.model.MovimientoSaldo;
 import org.example.proyectocine.model.TarjetaVirtual;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Intermediario entre la pantalla de la tarjeta virtual y el modelo.
- * No usa nada de JavaFX: recibe datos simples y trabaja con {@link Cine}.
+ * No usa nada de JavaFX: recibe datos simples y trabaja con {@link CineFacade}.
  */
 public class TarjetaController {
 
-    private final Cine cine;
+    private final CineFacade facade;
 
     public TarjetaController() {
-        this.cine = Cine.getInstancia();
+        this.facade = new CineFacade();
     }
 
     /**
@@ -26,14 +25,10 @@ public class TarjetaController {
      *
      * @param cedula cédula del cliente
      * @return el cliente encontrado
-     * @throws IllegalArgumentException si no existe un cliente con esa cédula
+     * @throws org.example.proyectocine.model.UsuarioNoEncontradoException si no existe un cliente con esa cédula
      */
     public Cliente buscarCliente(String cedula) {
-        Cliente cliente = cine.buscarClientePorCedula(cedula);
-        if (cliente == null) {
-            throw new IllegalArgumentException("No existe un cliente con la cédula " + cedula);
-        }
-        return cliente;
+        return facade.buscarCliente(cedula);
     }
 
     /**
@@ -44,7 +39,7 @@ public class TarjetaController {
      * @throws IllegalArgumentException si el monto es menor o igual a 0
      */
     public void recargar(Cliente cliente, double monto) {
-        cliente.getTheTarjeta().recargar(monto);
+        facade.recargarTarjeta(cliente.getCedula(), monto);
     }
 
     public TarjetaVirtual obtenerTarjeta(Cliente cliente) {
@@ -62,8 +57,6 @@ public class TarjetaController {
      * @return copia de la lista de movimientos en orden inverso
      */
     public ArrayList<MovimientoSaldo> obtenerMovimientosRecientes(Cliente cliente) {
-        ArrayList<MovimientoSaldo> movimientos = new ArrayList<>(cliente.getTheTarjeta().getListMovimientos());
-        Collections.reverse(movimientos);
-        return movimientos;
+        return facade.obtenerMovimientos(cliente.getCedula());
     }
 }

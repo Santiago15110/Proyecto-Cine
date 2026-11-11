@@ -1,7 +1,7 @@
 package org.example.proyectocine.controller;
 
 import org.example.proyectocine.model.Admin;
-import org.example.proyectocine.model.Cine;
+import org.example.proyectocine.model.CineFacade;
 import org.example.proyectocine.model.Cliente;
 import org.example.proyectocine.model.Usuario;
 
@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 /**
  * Intermediario entre la pantalla de registro y el modelo.
- * No usa nada de JavaFX: recibe datos simples y llama a {@link Cine}.
+ * No usa nada de JavaFX: recibe datos simples y llama a {@link CineFacade}.
  */
 public class RegistroUsuarioController {
 
-    private final Cine cine;
+    private final CineFacade facade;
 
     public RegistroUsuarioController() {
-        this.cine = Cine.getInstancia();
+        this.facade = new CineFacade();
     }
 
     /**
@@ -27,10 +27,10 @@ public class RegistroUsuarioController {
      * @param clave  contraseña del cliente
      * @param cedula cédula del cliente
      * @return el cliente registrado
-     * @throws IllegalArgumentException si el modelo rechaza los datos (campos vacíos, correo o cédula repetidos)
+     * @throws org.example.proyectocine.model.CinemaException si el correo o la cédula ya están registrados
      */
     public Cliente registrarCliente(String nombre, String correo, String clave, String cedula) {
-        return cine.registrarCliente(nombre, correo, clave, cedula);
+        return facade.registrarCliente(nombre, correo, clave, cedula);
     }
 
     /**
@@ -41,14 +41,14 @@ public class RegistroUsuarioController {
      * @param clave  contraseña del administrador
      * @param codigo código de administrador
      * @return el administrador registrado
-     * @throws IllegalArgumentException si el modelo rechaza los datos (campos vacíos o correo repetido)
+     * @throws org.example.proyectocine.model.CinemaException si el correo ya está registrado
      */
     public Admin registrarAdmin(String nombre, String correo, String clave, String codigo) {
-        return cine.registrarAdmin(nombre, correo, clave, codigo);
+        return facade.registrarAdmin(nombre, correo, clave, codigo);
     }
 
     public ArrayList<Usuario> obtenerUsuarios() {
-        return cine.getUsuarios();
+        return facade.obtenerUsuarios();
     }
 
     /**
