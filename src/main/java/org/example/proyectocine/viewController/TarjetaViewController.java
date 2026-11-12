@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.example.proyectocine.controller.TarjetaController;
 import org.example.proyectocine.model.AcumulacionPunto;
+import org.example.proyectocine.model.CinemaException;
 import org.example.proyectocine.model.Cliente;
 import org.example.proyectocine.model.MovimientoSaldo;
 import org.example.proyectocine.model.TarjetaVirtual;
@@ -18,10 +19,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-/**
- * Controlador de la pantalla TarjetaVirtual.fxml.
- * Muestra el saldo, los puntos y los movimientos del cliente, y permite recargar.
- */
+
 public class TarjetaViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
@@ -89,7 +87,7 @@ public class TarjetaViewController {
         try {
             mostrarCliente(tarjetaController.buscarCliente(cedula));
             lblBusqueda.setText("");
-        } catch (IllegalArgumentException e) {
+        } catch (CinemaException | IllegalArgumentException e) {
             cliente = null;
             contenido.setDisable(true);
             lblBusqueda.setText(e.getMessage());
@@ -112,7 +110,7 @@ public class TarjetaViewController {
             mostrarExito("Recarga de " + FORMATO_PESOS.format(monto) + " realizada correctamente.");
             txtMonto.clear();
             actualizarDatos();
-        } catch (IllegalArgumentException e) {
+        } catch (CinemaException | IllegalArgumentException e) {
             mostrarError(e.getMessage());
         }
     }

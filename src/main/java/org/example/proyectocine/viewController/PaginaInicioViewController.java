@@ -3,9 +3,6 @@ package org.example.proyectocine.viewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-/**
- * Controlador de la pantalla PaginaInicio.fxml.
- */
 public class PaginaInicioViewController {
     @FXML
     private Label welcomeText;
