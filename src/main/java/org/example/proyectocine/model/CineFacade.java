@@ -1,8 +1,10 @@
 package org.example.proyectocine.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class CineFacade {
 
@@ -113,7 +115,7 @@ public class CineFacade {
      * @param duracionMin duración en minutos
      * @param precio      precio base de la entrada
      * @return la función programada
-     * @throws CinemaException si la película o la sala no existen, o si el id de la función ya existe
+     * @throws CinemaException si la película o la sala no existen, o si el ID de la función ya existe
      */
     public Funcion programarFuncion(String id, String idPelicula, String idSala,
                                     LocalDateTime fechaHora, int duracionMin, double precio) {
@@ -187,5 +189,100 @@ public class CineFacade {
             throw new CinemaException("No existe una función con el id " + id);
         }
         return funcion;
+    }
+
+    /**
+     * Genera el Reporte de Ventas en un rango de fechas.
+     */
+    public ReporteStrategy crearReporteVentas(LocalDate inicio, LocalDate fin) {
+        return new ReporteVentas(inicio, fin, cine.getCompras());
+    }
+
+    /**
+     * Genera el Reporte de Entradas por Función.
+     */
+    public ReporteStrategy crearReporteEntradasFuncion(LocalDate inicio, LocalDate fin) {
+        return new ReporteEntradasFuncion(inicio, fin, cine.getFunciones(), cine.getCompras());
+    }
+
+    /**
+     * Genera el Reporte de Ocupación de Salas.
+     */
+    public ReporteStrategy crearReporteOcupacionSalas() {
+        return new ReporteOcupacionSalas(cine.getFunciones());
+    }
+
+    /**
+     * Genera el Reporte de Confitería.
+     */
+    public ReporteStrategy crearReporteConfiteria(LocalDate inicio, LocalDate fin) {
+        return new ReporteConfiteria(inicio, fin, cine.getCompras());
+    }
+
+    /**
+     * Genera el Reporte de Recargas obteniendo las tarjetas virtuales de los clientes registrados.
+     */
+    public ReporteStrategy crearReporteRecargas(LocalDate inicio, LocalDate fin) {
+        List<TarjetaVirtual> tarjetas = new ArrayList<>();
+        for (Usuario u : cine.getUsuarios()) {
+            if (u instanceof Cliente) {
+                tarjetas.add(((Cliente) u).getTheTarjeta());
+            }
+        }
+        return new ReporteRecargas(inicio, fin, tarjetas);
+    }
+
+    /**
+     * Genera el Reporte de Cancelaciones.
+     */
+    public ReporteStrategy crearReporteCancelaciones(LocalDate inicio, LocalDate fin) {
+        List<TarjetaVirtual> tarjetas = new ArrayList<>();
+        for (Usuario u : cine.getUsuarios()) {
+            if (u instanceof Cliente) {
+                tarjetas.add(((Cliente) u).getTheTarjeta());
+            }
+        }
+        return new ReporteCancelaciones(inicio, fin, cine.getCompras(), tarjetas);
+    }
+
+    /**
+     * Genera el Reporte de Puntos de los clientes.
+     */
+    public ReporteStrategy crearReportePuntos(LocalDate inicio, LocalDate fin) {
+        List<Cliente> clientes = new ArrayList<>();
+        for (Usuario u : cine.getUsuarios()) {
+            if (u instanceof Cliente) {
+                clientes.add((Cliente) u);
+            }
+        }
+        return new ReportePuntos(inicio, fin, clientes);
+    }
+
+    /**
+     * Genera el contenido en texto plano de cualquier estrategia de reporte seleccionada.
+     */
+    public String generarReporteTexto(ReporteStrategy estrategia) {
+        if (estrategia == null) {
+            throw new IllegalArgumentException("La estrategia de reporte no puede ser nula.");
+        }
+        return estrategia.generarContenidoTexto();
+    }
+
+    /**
+     * Exporta el reporte actual a un archivo de texto (.txt).
+     */
+    public void exportarReporteTXT(ReporteStrategy estrategia, String ruta) {
+        try {
+            ExportadorTXT.exportar(estrategia, ruta);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar el archivo TXT: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Exporta el reporte actual a un documento PDF.
+     */
+    public void exportarReportePDF(ReporteStrategy estrategia, String ruta) {
+        AdaptadorPDF.exportarPDF(estrategia, ruta);
     }
 }

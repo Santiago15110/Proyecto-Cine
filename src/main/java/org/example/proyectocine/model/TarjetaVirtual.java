@@ -68,6 +68,34 @@ public class TarjetaVirtual {
         listMovimientos.add(new MovimientoSaldo(TipoMovimiento.REEMBOLSO, monto, LocalDate.now(), LocalTime.now(), saldo, descripcion));
     }
 
+    /**
+     * Procesar pago por medio de banco externo
+     * @param monto valor a pagar
+     */
+    public boolean pagarConPasarelaExterna(double monto) {
+        if (monto <= 0) {
+            throw new IllegalArgumentException("El monto a pagar debe ser mayor a 0");
+        }
+        if (monto > saldo) {
+            throw new SaldoInsuficienteException("Saldo insuficiente en la tarjeta");
+        }
+
+        IPasarelaPago pasarela = new PasarelaPagoAdapter();
+        boolean aprobado = pasarela.procesarPago(this.numero, monto);
+
+        if (aprobado) {
+            saldo -= monto;
+            listMovimientos.add(new MovimientoSaldo(
+                    TipoMovimiento.PAGO,
+                    monto,
+                    LocalDate.now(),
+                    LocalTime.now(),
+                    saldo,
+                    "Pago procesado correctamente"));
+        }
+        return aprobado;
+    }
+
 
 
     public String getNumero() {
