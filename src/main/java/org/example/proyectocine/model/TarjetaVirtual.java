@@ -10,12 +10,14 @@ public class TarjetaVirtual {
     private double saldo;
     private Cliente theCliente;
     private ArrayList<MovimientoSaldo> listMovimientos;
+    private boolean activa;
 
 
     public TarjetaVirtual(Cliente theCliente) {
         this.numero = theCliente.getCedula();
         this.theCliente = theCliente;
         this.saldo = 0;
+        this.activa = true;
         listMovimientos = new ArrayList<>();
     }
 
@@ -25,11 +27,33 @@ public class TarjetaVirtual {
      * @throws IllegalArgumentException si el monto es menor o igual a 0
      */
     public void recargar(double monto) {
+        recargar(monto, "Se realizo una recarga");
+    }
+
+    /**
+     * Agrega dinero al saldo indicando el origen de la recarga.
+     * @param monto valor a recargar
+     * @param descripcion texto que queda en el movimiento
+     * @throws IllegalArgumentException si el monto es menor o igual a 0
+     */
+    public void recargar(double monto, String descripcion) {
         if (monto <= 0) {
             throw new IllegalArgumentException("El monto a recargar debe ser mayor a 0");
         }
         saldo += monto;
-        listMovimientos.add(new MovimientoSaldo(TipoMovimiento.RECARGA, monto, LocalDate.now(), LocalTime.now(), saldo, "Se realizo una recarga"));
+        listMovimientos.add(new MovimientoSaldo(TipoMovimiento.RECARGA, monto, LocalDate.now(), LocalTime.now(), saldo, descripcion));
+    }
+
+    public void bloquear() {
+        this.activa = false;
+    }
+
+    public void activar() {
+        this.activa = true;
+    }
+
+    public boolean isActiva() {
+        return activa;
     }
 
 
@@ -42,14 +66,29 @@ public class TarjetaVirtual {
      * @throws SaldoInsuficienteException si el monto es mayor que el saldo disponible
      */
     public void descontar(double monto) {
+        descontar(monto, "Se realizo un pago");
+    }
+
+    /**
+     * Descuenta dinero del saldo indicando qué se pagó (por ejemplo "Compra C-1A2B").
+     * @param monto valor a descontar
+     * @param descripcion texto que queda en el movimiento
+     * @throws IllegalArgumentException si el monto es menor o igual a 0
+     * @throws TarjetaInactivaException si la tarjeta está bloqueada
+     * @throws SaldoInsuficienteException si el monto es mayor que el saldo disponible
+     */
+    public void descontar(double monto, String descripcion) {
         if (monto <= 0) {
             throw new IllegalArgumentException("El monto a descontar debe ser mayor a 0");
+        }
+        if (!activa) {
+            throw new TarjetaInactivaException("La tarjeta " + numero + " está bloqueada");
         }
         if (monto > saldo) {
             throw new SaldoInsuficienteException("Saldo insuficiente");
         }
         saldo -= monto;
-        listMovimientos.add(new MovimientoSaldo(TipoMovimiento.PAGO, monto, LocalDate.now(),LocalTime.now(), saldo, "Se realizo un pago"));
+        listMovimientos.add(new MovimientoSaldo(TipoMovimiento.PAGO, monto, LocalDate.now(), LocalTime.now(), saldo, descripcion));
     }
 
 
@@ -67,35 +106,6 @@ public class TarjetaVirtual {
         saldo += monto;
         listMovimientos.add(new MovimientoSaldo(TipoMovimiento.REEMBOLSO, monto, LocalDate.now(), LocalTime.now(), saldo, descripcion));
     }
-
-    /**
-     * Procesar pago por medio de banco externo
-     * @param monto valor a pagar
-     */
-    public boolean pagarConPasarelaExterna(double monto) {
-        if (monto <= 0) {
-            throw new IllegalArgumentException("El monto a pagar debe ser mayor a 0");
-        }
-        if (monto > saldo) {
-            throw new SaldoInsuficienteException("Saldo insuficiente en la tarjeta");
-        }
-
-        IPasarelaPago pasarela = new PasarelaPagoAdapter();
-        boolean aprobado = pasarela.procesarPago(this.numero, monto);
-
-        if (aprobado) {
-            saldo -= monto;
-            listMovimientos.add(new MovimientoSaldo(
-                    TipoMovimiento.PAGO,
-                    monto,
-                    LocalDate.now(),
-                    LocalTime.now(),
-                    saldo,
-                    "Pago procesado correctamente"));
-        }
-        return aprobado;
-    }
-
 
 
     public String getNumero() {

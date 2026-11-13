@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Entrada implements Redimible {
 
-    private static final int COSTO_PUNTOS = 150;
+    public static final int COSTO_PUNTOS = 150;
 
     private final String id;
     private final Funcion funcion;

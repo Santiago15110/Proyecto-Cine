@@ -128,7 +128,9 @@ public class TarjetaViewController {
         lblTitular.setText(cliente.getNombre().toUpperCase());
         lblSaldo.setText(FORMATO_PESOS.format(tarjeta.getSaldo()));
         lblPuntos.setText(String.valueOf(puntos.getPuntos()));
-        lblVencimiento.setText("Vencen el " + puntos.getFechaVencimiento().format(FORMATO_FECHA));
+        lblVencimiento.setText(puntos.getFechaVencimiento() == null
+                ? "Sin puntos por vencer"
+                : "Los próximos vencen el " + puntos.getFechaVencimiento().format(FORMATO_FECHA));
 
         tblMovimientos.getItems().setAll(tarjetaController.obtenerMovimientosRecientes(cliente));
     }

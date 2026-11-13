@@ -114,6 +114,7 @@ public class Funcion implements Sujeto {
             throw new CancelacionNoPermitidaException("La función " + id + " ya está cancelada");
         }
         cancelada = true;
+        notificarObservador(TipoEvento.FUNCION_CANCELADA, this);
     }
 
     public String getId() {

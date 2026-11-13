@@ -16,6 +16,7 @@ public class Compra {
     private ComponentePrecio precio;
     private double total;
     private EstadoCompra estado;
+    private int puntosRedimidos;
 
     /**
      * Crea una compra en estado pendiente. Debe tener al menos una entrada o un producto
@@ -123,6 +124,26 @@ public class Compra {
 
     public EstadoCompra getEstado() {
         return estado;
+    }
+
+    /**
+     * Indica si la compra se pagó con puntos CinemaUQ en vez de saldo.
+     *
+     * @return true si se redimieron puntos
+     */
+    public boolean isPagadaConPuntos() {
+        return puntosRedimidos > 0;
+    }
+
+    public int getPuntosRedimidos() {
+        return puntosRedimidos;
+    }
+
+    public void setPuntosRedimidos(int puntosRedimidos) {
+        if (puntosRedimidos < 0) {
+            throw new IllegalArgumentException("Los puntos redimidos no pueden ser negativos");
+        }
+        this.puntosRedimidos = puntosRedimidos;
     }
 
     @Override
