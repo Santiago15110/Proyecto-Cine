@@ -1,8 +1,8 @@
-package org.example.proyectocine.viewController;
+package org.example.proyectocine.model;
 
-import org.example.proyectocine.model.ReporteStrategy;
 
 import javafx.scene.chart.*;
+
 import java.util.Map;
 
 public class ReporteVisual {
@@ -70,3 +70,4 @@ public class ReporteVisual {
         return lineChart;
     }
 }
+
