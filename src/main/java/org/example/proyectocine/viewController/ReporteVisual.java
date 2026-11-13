@@ -1,4 +1,6 @@
-package org.example.proyectocine.model;
+package org.example.proyectocine.viewController;
+
+import org.example.proyectocine.model.ReporteStrategy;
 
 import javafx.scene.chart.*;
 import java.util.Map;

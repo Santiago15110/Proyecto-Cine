@@ -12,7 +12,7 @@ public class Funcion implements Sujeto {
     private final LocalDateTime fechaHora;
     private final int duracionMin;
     private final double precioBase;
-    private boolean cancelada;
+    private boolean cancelada;   // la única decisión manual; PROGRAMADA/FINALIZADA se calculan por la hora
     private final Set<Asiento> asientosOcupados;
     private final ArrayList<Observador> listObservadores = new ArrayList<>();
 
@@ -143,6 +143,22 @@ public class Funcion implements Sujeto {
 
     public boolean isCancelada() {
         return cancelada;
+    }
+
+    /**
+     * Estado actual de la función: CANCELADA si el cine la canceló, FINALIZADA si ya terminó
+     * (fecha y hora de inicio + duración) y PROGRAMADA en otro caso.
+     *
+     * @return el estado de la función
+     */
+    public EstadoFuncion getEstado() {
+        if (cancelada) {
+            return EstadoFuncion.CANCELADA;
+        }
+        if (LocalDateTime.now().isAfter(fechaHora.plusMinutes(duracionMin))) {
+            return EstadoFuncion.FINALIZADA;
+        }
+        return EstadoFuncion.PROGRAMADA;
     }
 
     public Set<Asiento> getAsientosOcupados() {

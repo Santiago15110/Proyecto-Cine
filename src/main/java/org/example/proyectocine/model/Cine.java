@@ -18,6 +18,7 @@ public class Cine {
     private final ArrayList<Pelicula> listPeliculas = new ArrayList<>();
     private final ArrayList<Compra> listCompras = new ArrayList<>();
     private final ArrayList<ItemConfiteria> listConfiteria = new ArrayList<>();
+    private final ArrayList<Promocion> listPromociones = new ArrayList<>();
 
     private Usuario usuarioActual;
 
@@ -153,24 +154,40 @@ public class Cine {
         return listPeliculas;
     }
 
-    public ArrayList<Usuario> getListUsuarios() {
-        return listUsuarios;
+    public ArrayList<Cliente> getClientes() {
+        ArrayList<Cliente> clientes = new ArrayList<>();
+        for (Usuario u : listUsuarios) {
+            if (u instanceof Cliente) {
+                clientes.add((Cliente) u);
+            }
+        }
+        return clientes;
     }
 
-    public ArrayList<Funcion> getListFunciones() {
-        return listFunciones;
+    /**
+     * Agrega una promoción.
+     *
+     * @param promocion promoción a agregar
+     * @throws CinemaException si ya existe una promoción con el mismo id
+     */
+    public void agregarPromocion(Promocion promocion) {
+        if (buscarPromocion(promocion.getId()) != null) {
+            throw new CinemaException("Ya existe una promoción con el id " + promocion.getId());
+        }
+        listPromociones.add(promocion);
     }
 
-    public ArrayList<Sala> getListSalas() {
-        return listSalas;
+    public Promocion buscarPromocion(String id) {
+        for (Promocion p : listPromociones) {
+            if (p.getId().equals(id)) {
+                return p;
+            }
+        }
+        return null;
     }
 
-    public ArrayList<Pelicula> getListPeliculas() {
-        return listPeliculas;
-    }
-
-    public ArrayList<Compra> getListCompras() {
-        return listCompras;
+    public ArrayList<Promocion> getPromociones() {
+        return listPromociones;
     }
 
     /**

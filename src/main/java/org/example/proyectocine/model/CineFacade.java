@@ -39,7 +39,14 @@ public class CineFacade {
         return cine.registrarCliente(nombre, correo, clave, cedula);
     }
 
+    /**
+     * Registra un administrador. El primer administrador se puede crear libremente;
+     * después, solo otro administrador puede crear administradores.
+     */
     public Admin registrarAdmin(String nombre, String correo, String clave, String codigo) {
+        if (existeAdministrador()) {
+            validarAdministrador("registrar administradores");
+        }
         return cine.registrarAdmin(nombre, correo, clave, codigo);
     }
 
@@ -85,6 +92,11 @@ public class CineFacade {
 
     public ArrayList<Usuario> obtenerUsuarios() {
         return new ArrayList<>(cine.getUsuarios());
+    }
+
+    public ArrayList<Cliente> obtenerClientes() {
+        validarAdministrador("consultar clientes");
+        return cine.getClientes();
     }
 
     // ===================== TARJETA =====================
@@ -153,15 +165,43 @@ public class CineFacade {
 
     public Pelicula agregarPelicula(String id, String titulo, Genero genero, String clasificacion,
                                     String descripcion, String rutaPoster) {
+        validarAdministrador("gestionar películas");
         Pelicula pelicula = new Pelicula(id, titulo, genero, clasificacion, descripcion, rutaPoster);
         cine.agregarPelicula(pelicula);
         return pelicula;
     }
 
+    public void retirarDeCartelera(String idPelicula) {
+        validarAdministrador("gestionar películas");
+        buscarPelicula(idPelicula).setEnCartelera(false);
+    }
+
+    public void ponerEnCartelera(String idPelicula) {
+        validarAdministrador("gestionar películas");
+        buscarPelicula(idPelicula).setEnCartelera(true);
+    }
+
     public Sala crearSala(String id, String nombre, int filas, int columnas) {
+        validarAdministrador("gestionar salas");
         Sala sala = new Sala(id, nombre, filas, columnas);
         cine.agregarSala(sala);
         return sala;
+    }
+
+    /**
+     * Deshabilita un asiento de una sala (por ejemplo, por daño). No se podrá vender.
+     *
+     * @param idSala id de la sala
+     * @param codigo código del asiento (ejemplo: "C4")
+     */
+    public void deshabilitarAsiento(String idSala, String codigo) {
+        validarAdministrador("gestionar asientos");
+        buscarAsientoEnSala(buscarSala(idSala), codigo).setHabilitado(false);
+    }
+
+    public void habilitarAsiento(String idSala, String codigo) {
+        validarAdministrador("gestionar asientos");
+        buscarAsientoEnSala(buscarSala(idSala), codigo).setHabilitado(true);
     }
 
     /**
@@ -178,6 +218,7 @@ public class CineFacade {
      */
     public Funcion programarFuncion(String id, String idPelicula, String idSala,
                                     LocalDateTime fechaHora, int duracionMin, double precio) {
+        validarAdministrador("programar funciones");
         Pelicula pelicula = buscarPelicula(idPelicula);
         Sala sala = buscarSala(idSala);
         Funcion funcion = new Funcion(id, pelicula, sala, fechaHora, duracionMin, precio);
@@ -191,6 +232,7 @@ public class CineFacade {
      * @param idFuncion id de la función
      */
     public void cancelarFuncion(String idFuncion) {
+        validarAdministrador("cancelar funciones");
         Funcion funcion = buscarFuncion(idFuncion);
         if (funcion.isCancelada()) {
             throw new CancelacionNoPermitidaException("La función " + idFuncion + " ya está cancelada");
@@ -362,6 +404,7 @@ public class CineFacade {
     // ===================== CONFITERÍA (COMPOSITE) =====================
 
     public Producto crearProducto(String id, String nombre, double precio, int costoPuntos) {
+        validarAdministrador("gestionar la confitería");
         Producto producto = new Producto(id, nombre, precio, costoPuntos);
         cine.agregarItemConfiteria(producto);
         return producto;
@@ -378,6 +421,7 @@ public class CineFacade {
      * @return el combo creado
      */
     public Combo crearCombo(String id, String nombre, double descuento, ArrayList<String> idsItems) {
+        validarAdministrador("gestionar la confitería");
         if (idsItems == null || idsItems.isEmpty()) {
             throw new CinemaException("El combo debe tener al menos un producto");
         }
@@ -391,6 +435,40 @@ public class CineFacade {
 
     public ArrayList<ItemConfiteria> obtenerConfiteria() {
         return new ArrayList<>(cine.getConfiteria());
+    }
+
+    // ===================== PROMOCIONES (DECORATOR) =====================
+
+    public Promocion crearPromocion(String id, String nombre, double porcentaje,
+                                    LocalDate fechaInicio, LocalDate fechaFin) {
+        validarAdministrador("gestionar promociones");
+        Promocion promocion = new Promocion(id, nombre, porcentaje, fechaInicio, fechaFin);
+        cine.agregarPromocion(promocion);
+        return promocion;
+    }
+
+    public void desactivarPromocion(String idPromocion) {
+        validarAdministrador("gestionar promociones");
+        buscarPromocion(idPromocion).setActiva(false);
+    }
+
+    public void activarPromocion(String idPromocion) {
+        validarAdministrador("gestionar promociones");
+        buscarPromocion(idPromocion).setActiva(true);
+    }
+
+    public ArrayList<Promocion> obtenerPromociones() {
+        return new ArrayList<>(cine.getPromociones());
+    }
+
+    public ArrayList<Promocion> obtenerPromocionesVigentes() {
+        ArrayList<Promocion> vigentes = new ArrayList<>();
+        for (Promocion p : cine.getPromociones()) {
+            if (p.estaVigente(LocalDate.now())) {
+                vigentes.add(p);
+            }
+        }
+        return vigentes;
     }
 
     // ===================== CONSULTAS =====================
@@ -411,6 +489,31 @@ public class CineFacade {
 
     public ArrayList<Funcion> obtenerFunciones() {
         return new ArrayList<>(cine.getFunciones());
+    }
+
+    /**
+     * Funciones de una película que todavía se pueden comprar (no canceladas y sin empezar),
+     * ordenadas por fecha. Es lo que ve el cliente en la cartelera.
+     *
+     * @param idPelicula id de la película
+     * @return funciones disponibles
+     */
+    public ArrayList<Funcion> obtenerFuncionesDisponibles(String idPelicula) {
+        Pelicula pelicula = buscarPelicula(idPelicula);
+        ArrayList<Funcion> disponibles = new ArrayList<>();
+        for (Funcion f : cine.getFunciones()) {
+            if (f.getPelicula().equals(pelicula) && f.getEstado() == EstadoFuncion.PROGRAMADA
+                    && f.getFechaHora().isAfter(LocalDateTime.now())) {
+                disponibles.add(f);
+            }
+        }
+        disponibles.sort((a, b) -> a.getFechaHora().compareTo(b.getFechaHora()));
+        return disponibles;
+    }
+
+    public ArrayList<Compra> obtenerCompras() {
+        validarAdministrador("consultar compras");
+        return new ArrayList<>(cine.getCompras());
     }
 
     /**
@@ -445,6 +548,9 @@ public class CineFacade {
             Funcion funcion = buscarFuncion(idFuncion);
             if (funcion.isCancelada()) {
                 throw new CinemaException("La función " + idFuncion + " está cancelada");
+            }
+            if (!funcion.getFechaHora().isAfter(LocalDateTime.now())) {
+                throw new CinemaException("La función " + idFuncion + " ya empezó; no se pueden vender entradas");
             }
             for (String codigo : codigosAsientos) {
                 Asiento asiento = buscarAsiento(funcion, codigo);
@@ -523,6 +629,35 @@ public class CineFacade {
         }
     }
 
+    private boolean existeAdministrador() {
+        for (Usuario u : cine.getUsuarios()) {
+            if (u instanceof Admin) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Asiento buscarAsientoEnSala(Sala sala, String codigo) {
+        if (codigo == null || !codigo.trim().matches("[A-Za-z]\\d+")) {
+            throw new CinemaException("El asiento " + codigo + " no tiene un formato válido (ejemplo: A5)");
+        }
+        String limpio = codigo.trim();
+        try {
+            return sala.buscarAsiento(limpio.charAt(0), Integer.parseInt(limpio.substring(1)));
+        } catch (IllegalArgumentException e) {
+            throw new CinemaException(e.getMessage());
+        }
+    }
+
+    private Promocion buscarPromocion(String id) {
+        Promocion promocion = cine.buscarPromocion(id);
+        if (promocion == null) {
+            throw new CinemaException("No existe una promoción con el id " + id);
+        }
+        return promocion;
+    }
+
     private boolean tieneComprasPagadas(Cliente cliente, Funcion funcion) {
         for (Compra c : cine.comprasDeCliente(cliente)) {
             if (funcion.equals(c.getFuncion()) && c.getEstado() instanceof EstadoPagada) {
@@ -533,15 +668,7 @@ public class CineFacade {
     }
 
     private Asiento buscarAsiento(Funcion funcion, String codigo) {
-        if (codigo == null || !codigo.trim().matches("[A-Za-z]\\d+")) {
-            throw new CinemaException("El asiento " + codigo + " no tiene un formato válido (ejemplo: A5)");
-        }
-        String limpio = codigo.trim();
-        try {
-            return funcion.getSala().buscarAsiento(limpio.charAt(0), Integer.parseInt(limpio.substring(1)));
-        } catch (IllegalArgumentException e) {
-            throw new CinemaException(e.getMessage());
-        }
+        return buscarAsientoEnSala(funcion.getSala(), codigo);
     }
 
     private ItemConfiteria buscarItemConfiteria(String id) {
@@ -584,73 +711,51 @@ public class CineFacade {
         return funcion;
     }
 
-    // ===================== REPORTES (STRATEGY) =====================
+    // ===================== REPORTES (FACTORY METHOD + STRATEGY) =====================
 
     /**
-     * Genera el Reporte de Ventas en un rango de fechas.
+     * Crea el reporte que elija el administrador. {@link TipoReporte} (Factory Method) decide
+     * qué estrategia concreta construir; el Facade no conoce las clases de cada reporte.
+     *
+     * @param tipo   tipo de reporte
+     * @param inicio inicio del periodo (se ignora si el reporte no usa fechas)
+     * @param fin    fin del periodo
+     * @return el reporte (Strategy) listo para generar texto, gráfico o exportarse
      */
+    public ReporteStrategy crearReporte(TipoReporte tipo, LocalDate inicio, LocalDate fin) {
+        validarAdministrador("generar reportes");
+        if (tipo == null) {
+            throw new IllegalArgumentException("Debes elegir un tipo de reporte");
+        }
+        return tipo.crear(cine, inicio, fin);
+    }
+
     public ReporteStrategy crearReporteVentas(LocalDate inicio, LocalDate fin) {
-        return new ReporteVentas(inicio, fin, cine.getCompras());
+        return crearReporte(TipoReporte.VENTAS, inicio, fin);
     }
 
-    /**
-     * Genera el Reporte de Entradas por Función.
-     */
     public ReporteStrategy crearReporteEntradasFuncion(LocalDate inicio, LocalDate fin) {
-        return new ReporteEntradasFuncion(inicio, fin, cine.getFunciones(), cine.getCompras());
+        return crearReporte(TipoReporte.ENTRADAS_POR_FUNCION, inicio, fin);
     }
 
-    /**
-     * Genera el Reporte de Ocupación de Salas.
-     */
     public ReporteStrategy crearReporteOcupacionSalas() {
-        return new ReporteOcupacionSalas(cine.getFunciones());
+        return crearReporte(TipoReporte.OCUPACION_SALAS, null, null);
     }
 
-    /**
-     * Genera el Reporte de Confitería.
-     */
     public ReporteStrategy crearReporteConfiteria(LocalDate inicio, LocalDate fin) {
-        return new ReporteConfiteria(inicio, fin, cine.getCompras());
+        return crearReporte(TipoReporte.CONFITERIA, inicio, fin);
     }
 
-    /**
-     * Genera el Reporte de Recargas obteniendo las tarjetas virtuales de los clientes registrados.
-     */
     public ReporteStrategy crearReporteRecargas(LocalDate inicio, LocalDate fin) {
-        List<TarjetaVirtual> tarjetas = new ArrayList<>();
-        for (Usuario u : cine.getUsuarios()) {
-            if (u instanceof Cliente) {
-                tarjetas.add(((Cliente) u).getTheTarjeta());
-            }
-        }
-        return new ReporteRecargas(inicio, fin, tarjetas);
+        return crearReporte(TipoReporte.RECARGAS, inicio, fin);
     }
 
-    /**
-     * Genera el Reporte de Cancelaciones.
-     */
     public ReporteStrategy crearReporteCancelaciones(LocalDate inicio, LocalDate fin) {
-        List<TarjetaVirtual> tarjetas = new ArrayList<>();
-        for (Usuario u : cine.getUsuarios()) {
-            if (u instanceof Cliente) {
-                tarjetas.add(((Cliente) u).getTheTarjeta());
-            }
-        }
-        return new ReporteCancelaciones(inicio, fin, cine.getCompras(), tarjetas);
+        return crearReporte(TipoReporte.CANCELACIONES, inicio, fin);
     }
 
-    /**
-     * Genera el Reporte de Puntos de los clientes.
-     */
     public ReporteStrategy crearReportePuntos(LocalDate inicio, LocalDate fin) {
-        List<Cliente> clientes = new ArrayList<>();
-        for (Usuario u : cine.getUsuarios()) {
-            if (u instanceof Cliente) {
-                clientes.add((Cliente) u);
-            }
-        }
-        return new ReportePuntos(inicio, fin, clientes);
+        return crearReporte(TipoReporte.PUNTOS, inicio, fin);
     }
 
     /**

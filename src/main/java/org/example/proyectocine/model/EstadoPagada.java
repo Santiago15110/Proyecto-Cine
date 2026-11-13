@@ -9,7 +9,7 @@ public class EstadoPagada implements EstadoCompra {
      */
     @Override
     public void confirmar(Compra c) {
-        throw new IllegalStateException("La compra " + c.getId() + " ya está pagada");
+        throw new CinemaException("La compra " + c.getId() + " ya está pagada");
     }
 
     /**

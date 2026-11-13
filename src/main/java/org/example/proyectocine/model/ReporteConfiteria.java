@@ -76,7 +76,8 @@ public class ReporteConfiteria extends ReporteStrategy {
             if (fechaInicio != null && fechaCompra.isBefore(fechaInicio)) dentroDeRango = false;
             if (fechaFin != null && fechaCompra.isAfter(fechaFin)) dentroDeRango = false;
 
-            if (dentroDeRango && compra.getLineas() != null) {
+            // Solo cuentan las compras pagadas (no las canceladas)
+            if (dentroDeRango && compra.getEstado() instanceof EstadoPagada && compra.getLineas() != null) {
                 for (LineaProducto linea : compra.getLineas()) {
                     String nombreItem = linea.getItem().getNombre();
                     int cantidad = linea.getCantidad();

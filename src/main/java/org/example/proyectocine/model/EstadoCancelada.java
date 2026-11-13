@@ -8,7 +8,7 @@ public class EstadoCancelada implements EstadoCompra{
      */
     @Override
     public void confirmar(Compra c) {
-        throw new IllegalStateException("La compra " + c.getId() + " está cancelada");
+        throw new CinemaException("La compra " + c.getId() + " está cancelada");
     }
 
     /**
