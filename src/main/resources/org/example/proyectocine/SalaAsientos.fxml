@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.SalaAsientosViewController">
+    <padding>
+        <Insets top="20.0" right="25.0" bottom="20.0" left="25.0"/>
+    </padding>
+
+    <Label text="Elige tus asientos" styleClass="titulo"/>
+
+    <!-- Barra con los datos de la función -->
+    <HBox spacing="40.0" alignment="CENTER_LEFT" styleClass="tarjeta">
+        <padding>
+            <Insets top="10.0" right="20.0" bottom="10.0" left="20.0"/>
+        </padding>
+        <Label fx:id="lblPeliculaBarra" text="Película" styleClass="subtitulo"/>
+        <Label fx:id="lblFechaBarra" text="--"/>
+        <Label fx:id="lblHoraBarra" text="--"/>
+        <Label fx:id="lblSalaBarra" text="--"/>
+    </HBox>
+
+    <HBox spacing="15.0">
+
+        <!-- Mapa de la sala -->
+        <VBox spacing="12.0" alignment="TOP_CENTER" styleClass="tarjeta" HBox.hgrow="ALWAYS">
+            <Label text="PANTALLA" styleClass="texto-pantalla"/>
+            <Region styleClass="pantalla-cine" maxWidth="420.0"/>
+
+            <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-transparente"
+                        maxWidth="620.0" maxHeight="420.0" VBox.vgrow="ALWAYS">
+                <StackPane>
+                    <padding>
+                        <Insets top="10.0" right="5.0" bottom="10.0" left="5.0"/>
+                    </padding>
+                    <GridPane fx:id="gridAsientos" hgap="6.0" vgap="6.0" alignment="CENTER"/>
+                </StackPane>
+            </ScrollPane>
+
+            <!-- Leyenda -->
+            <HBox spacing="18.0" alignment="CENTER">
+                <HBox spacing="6.0" alignment="CENTER_LEFT">
+                    <Region styleClass="muestra-leyenda, asiento-disponible"/>
+                    <Label text="Disponible"/>
+                </HBox>
+                <HBox spacing="6.0" alignment="CENTER_LEFT">
+                    <Region styleClass="muestra-leyenda, asiento-seleccionado"/>
+                    <Label text="Seleccionado"/>
+                </HBox>
+                <HBox spacing="6.0" alignment="CENTER_LEFT">
+                    <Region styleClass="muestra-leyenda, asiento-ocupado"/>
+                    <Label text="Ocupado"/>
+                </HBox>
+                <HBox spacing="6.0" alignment="CENTER_LEFT">
+                    <Region styleClass="muestra-leyenda, asiento-deshabilitado"/>
+                    <Label text="No disponible"/>
+                </HBox>
+            </HBox>
+        </VBox>
+
+        <!-- Resumen de la compra -->
+        <VBox spacing="12.0" styleClass="tarjeta" prefWidth="290.0" minWidth="290.0">
+            <HBox spacing="12.0">
+                <StackPane prefWidth="80.0" prefHeight="115.0" minWidth="80.0" minHeight="115.0">
+                    <VBox fx:id="posterVacio" alignment="CENTER" styleClass="poster-vacio">
+                        <padding>
+                            <Insets top="6.0" right="6.0" bottom="6.0" left="6.0"/>
+                        </padding>
+                        <Label wrapText="true" textAlignment="CENTER"/>
+                    </VBox>
+                    <ImageView fx:id="imgPoster" fitWidth="80.0" fitHeight="115.0" preserveRatio="true" visible="false"/>
+                </StackPane>
+                <VBox spacing="4.0">
+                    <Label fx:id="lblTitulo" text="Película" styleClass="subtitulo" wrapText="true"/>
+                    <Label fx:id="lblFecha" text="--" styleClass="texto-secundario"/>
+                    <Label fx:id="lblHora" text="--" styleClass="texto-secundario"/>
+                    <Label fx:id="lblSala" text="--" styleClass="texto-secundario"/>
+                </VBox>
+            </HBox>
+
+            <Separator/>
+
+            <Label text="ASIENTOS SELECCIONADOS" styleClass="etiqueta-seccion"/>
+            <FlowPane fx:id="flowSeleccionados" hgap="6.0" vgap="6.0"/>
+
+            <Separator/>
+
+            <Label text="ENTRADAS" styleClass="etiqueta-seccion"/>
+            <HBox spacing="8.0">
+                <Label text="General"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblDetalleEntradas" text="0 × \$ 0" styleClass="texto-secundario"/>
+                <Label fx:id="lblValorEntradas" text="\$ 0" minWidth="70.0" alignment="CENTER_RIGHT"/>
+            </HBox>
+            <HBox>
+                <Label text="Subtotal"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblSubtotal" text="\$ 0"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+                <Label text="TOTAL" styleClass="subtitulo"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblTotal" text="\$ 0" styleClass="total-compra"/>
+            </HBox>
+
+            <Button text="Continuar al pago" styleClass="boton-principal" maxWidth="Infinity"
+                    defaultButton="true" onAction="#onContinuar"/>
+            <Button text="Volver" maxWidth="Infinity" cancelButton="true" onAction="#onVolver"/>
+            <Label fx:id="lblMensaje" wrapText="true"/>
+
+            <Separator/>
+
+            <Label text="PUNTOS CINEMAUQ" styleClass="etiqueta-seccion"/>
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Ganarás con esta compra" styleClass="texto-secundario"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblPuntos" text="0 pts" styleClass="subtitulo, texto-acento"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

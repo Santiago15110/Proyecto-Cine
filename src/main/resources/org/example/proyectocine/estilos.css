@@ -130,3 +130,120 @@
 .table-row-cell:selected .text {
     -fx-fill: #333333;
 }
+
+/* ===== Selección de asientos ===== */
+
+.etiqueta-seccion {
+    -fx-text-fill: #b71c1c;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.texto-pantalla {
+    -fx-text-fill: #777777;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* Línea curva simulada que representa la pantalla del cine */
+.pantalla-cine {
+    -fx-background-color: linear-gradient(to right, transparent, #b71c1c, transparent);
+    -fx-background-radius: 3;
+    -fx-min-height: 5;
+    -fx-pref-height: 5;
+    -fx-max-height: 5;
+}
+
+.letra-fila {
+    -fx-text-fill: #555555;
+    -fx-font-weight: bold;
+}
+
+.scroll-transparente,
+.scroll-transparente > .viewport {
+    -fx-background-color: transparent;
+}
+
+.asiento {
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-pref-width: 32;
+    -fx-pref-height: 32;
+    -fx-padding: 0;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.asiento-disponible {
+    -fx-background-color: white;
+    -fx-border-color: #bdbdbd;
+    -fx-text-fill: #333333;
+}
+
+.asiento-disponible:hover {
+    -fx-background-color: #f8d7d7;
+    -fx-border-color: #b71c1c;
+}
+
+.asiento-seleccionado,
+.asiento-seleccionado:hover {
+    -fx-background-color: #b71c1c;
+    -fx-border-color: #8e1515;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.asiento-ocupado,
+.asiento-ocupado:hover {
+    -fx-background-color: #757575;
+    -fx-border-color: #616161;
+    -fx-text-fill: #e0e0e0;
+}
+
+.asiento-deshabilitado,
+.asiento-deshabilitado:hover {
+    -fx-background-color: #eeeeee;
+    -fx-border-color: #e0e0e0;
+    -fx-text-fill: #bdbdbd;
+}
+
+/* Cuadrito de color de la leyenda */
+.muestra-leyenda {
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+    -fx-max-width: 16;
+    -fx-max-height: 16;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+}
+
+.chip-asiento {
+    -fx-background-color: #b71c1c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10;
+    -fx-background-radius: 12;
+}
+
+.poster-vacio {
+    -fx-background-color: linear-gradient(to bottom, #b71c1c, #4a0b0b);
+    -fx-background-radius: 8;
+}
+
+.poster-vacio .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.texto-secundario {
+    -fx-text-fill: #777777;
+}
+
+.total-compra {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b71c1c;
+}
