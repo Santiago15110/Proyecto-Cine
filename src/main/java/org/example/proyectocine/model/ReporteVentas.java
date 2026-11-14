@@ -66,10 +66,11 @@ public class ReporteVentas extends ReporteStrategy{
             if (fechaInicio != null && fechaCompra.isBefore(fechaInicio)) dentroDeRango = false;
             if (fechaFin != null && fechaCompra.isAfter(fechaFin)) dentroDeRango = false;
 
-            if (dentroDeRango && compra.getFuncion() != null) {
+            // Solo cuentan las compras pagadas; las pagadas con puntos suman entradas pero no dinero
+            if (dentroDeRango && compra.getFuncion() != null && compra.getEstado() instanceof EstadoPagada) {
                 String nombrePelicula = compra.getFuncion().getPelicula().getTitulo();
                 int cantEntradas = compra.getEntradas().size();
-                double valorCompra = compra.getTotal();
+                double valorCompra = compra.isPagadaConPuntos() ? 0 : compra.getTotal();
 
                 mapa.putIfAbsent(nombrePelicula, new DatosPeliculaReporte());
                 DatosPeliculaReporte datos = mapa.get(nombrePelicula);

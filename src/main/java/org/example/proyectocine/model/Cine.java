@@ -17,6 +17,10 @@ public class Cine {
     private final ArrayList<Sala> listSalas = new ArrayList<>();
     private final ArrayList<Pelicula> listPeliculas = new ArrayList<>();
     private final ArrayList<Compra> listCompras = new ArrayList<>();
+    private final ArrayList<ItemConfiteria> listConfiteria = new ArrayList<>();
+    private final ArrayList<Promocion> listPromociones = new ArrayList<>();
+
+    private Usuario usuarioActual;
 
     private Cine() {
     }
@@ -150,24 +154,40 @@ public class Cine {
         return listPeliculas;
     }
 
-    public ArrayList<Usuario> getListUsuarios() {
-        return listUsuarios;
+    public ArrayList<Cliente> getClientes() {
+        ArrayList<Cliente> clientes = new ArrayList<>();
+        for (Usuario u : listUsuarios) {
+            if (u instanceof Cliente) {
+                clientes.add((Cliente) u);
+            }
+        }
+        return clientes;
     }
 
-    public ArrayList<Funcion> getListFunciones() {
-        return listFunciones;
+    /**
+     * Agrega una promoción.
+     *
+     * @param promocion promoción a agregar
+     * @throws CinemaException si ya existe una promoción con el mismo id
+     */
+    public void agregarPromocion(Promocion promocion) {
+        if (buscarPromocion(promocion.getId()) != null) {
+            throw new CinemaException("Ya existe una promoción con el id " + promocion.getId());
+        }
+        listPromociones.add(promocion);
     }
 
-    public ArrayList<Sala> getListSalas() {
-        return listSalas;
+    public Promocion buscarPromocion(String id) {
+        for (Promocion p : listPromociones) {
+            if (p.getId().equals(id)) {
+                return p;
+            }
+        }
+        return null;
     }
 
-    public ArrayList<Pelicula> getListPeliculas() {
-        return listPeliculas;
-    }
-
-    public ArrayList<Compra> getListCompras() {
-        return listCompras;
+    public ArrayList<Promocion> getPromociones() {
+        return listPromociones;
     }
 
     /**
@@ -224,6 +244,99 @@ public class Cine {
 
     public ArrayList<Compra> getCompras() {
         return listCompras;
+    }
+
+    /**
+     * Agrega un producto o combo a la confitería.
+     *
+     * @param item producto o combo a agregar
+     * @throws CinemaException si ya existe un ítem con el mismo id
+     */
+    public void agregarItemConfiteria(ItemConfiteria item) {
+        if (buscarItemConfiteria(item.getId()) != null) {
+            throw new CinemaException("Ya existe un producto o combo con el id " + item.getId());
+        }
+        listConfiteria.add(item);
+    }
+
+    public ItemConfiteria buscarItemConfiteria(String id) {
+        for (ItemConfiteria i : listConfiteria) {
+            if (i.getId().equals(id)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<ItemConfiteria> getConfiteria() {
+        return listConfiteria;
+    }
+
+    /**
+     * Usuario que tiene la sesión abierta (cliente o administrador), o null si nadie ha iniciado sesión.
+     *
+     * @return el usuario actual
+     */
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
+
+    public void setUsuarioActual(Usuario usuarioActual) {
+        this.usuarioActual = usuarioActual;
+    }
+
+    /**
+     * Guarda una compra ya confirmada y pagada.
+     *
+     * @param compra compra a guardar
+     * @throws CinemaException si ya existe una compra con el mismo id
+     */
+    public void agregarCompra(Compra compra) {
+        if (buscarCompra(compra.getId()) != null) {
+            throw new CinemaException("Ya existe una compra con el id " + compra.getId());
+        }
+        listCompras.add(compra);
+    }
+
+    public Compra buscarCompra(String id) {
+        for (Compra c : listCompras) {
+            if (c.getId().equals(id)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Devuelve las compras de un cliente (su historial).
+     *
+     * @param cliente cliente a consultar
+     * @return compras del cliente
+     */
+    public ArrayList<Compra> comprasDeCliente(Cliente cliente) {
+        ArrayList<Compra> resultado = new ArrayList<>();
+        for (Compra c : listCompras) {
+            if (c.getCliente().equals(cliente)) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
+    }
+
+    /**
+     * Devuelve las compras que tienen entradas para una función.
+     *
+     * @param funcion función a consultar
+     * @return compras de esa función
+     */
+    public ArrayList<Compra> comprasDeFuncion(Funcion funcion) {
+        ArrayList<Compra> resultado = new ArrayList<>();
+        for (Compra c : listCompras) {
+            if (funcion.equals(c.getFuncion())) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
     }
 
 

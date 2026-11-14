@@ -21,4 +21,9 @@ public class PaginaInicioViewController {
     protected void onTarjetaClick() {
         SceneManager.cambiarA(Vista.TARJETA);
     }
+
+    @FXML
+    protected void onReportesClick() {
+        SceneManager.cambiarA(Vista.REPORTES);
+    }
 }

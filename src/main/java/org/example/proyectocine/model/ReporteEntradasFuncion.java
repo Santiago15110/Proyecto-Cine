@@ -70,7 +70,12 @@ public class ReporteEntradasFuncion extends ReporteStrategy {
         Map<String, Integer> mapa = new HashMap<>();
 
         for (Compra compra : comprasTotales) {
-            if (compra.getFuncion() != null && !compra.getEntradas().isEmpty()) {
+            LocalDate fechaCompra = compra.getFecha().toLocalDate();
+            boolean dentroDeRango = (fechaInicio == null || !fechaCompra.isBefore(fechaInicio))
+                    && (fechaFin == null || !fechaCompra.isAfter(fechaFin));
+            // Solo cuentan las compras pagadas (no las canceladas) dentro del periodo
+            if (dentroDeRango && compra.getEstado() instanceof EstadoPagada
+                    && compra.getFuncion() != null && !compra.getEntradas().isEmpty()) {
                 String idFuncion = compra.getFuncion().getId();
                 int cantidadEntradas = compra.getEntradas().size();
 

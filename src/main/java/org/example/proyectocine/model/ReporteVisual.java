@@ -1,6 +1,8 @@
 package org.example.proyectocine.model;
 
+
 import javafx.scene.chart.*;
+
 import java.util.Map;
 
 public class ReporteVisual {
@@ -68,3 +70,4 @@ public class ReporteVisual {
         return lineChart;
     }
 }
+

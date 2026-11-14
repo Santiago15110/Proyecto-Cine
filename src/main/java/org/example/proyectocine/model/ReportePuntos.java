@@ -72,7 +72,8 @@ public class ReportePuntos extends ReporteStrategy {
             int redimidos = 0;
             AcumulacionPunto acumulacion = cliente.getTheAcumulacion();
             if (acumulacion != null) {
-
+                acumulados = acumulacion.getTotalAcumulados();
+                redimidos = acumulacion.getTotalRedimidos();
             }
 
             lista.add(new ResumenPuntosCliente(cliente.getCedula(), cliente.getNombre(), acumulados, redimidos));

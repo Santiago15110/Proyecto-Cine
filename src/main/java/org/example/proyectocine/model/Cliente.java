@@ -1,7 +1,6 @@
 package org.example.proyectocine.model;
 
-import javafx.beans.binding.ObjectExpression;
-
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Cliente extends Usuario implements Observador {
@@ -36,12 +35,14 @@ public class Cliente extends Usuario implements Observador {
     public void actualizar(TipoEvento evento, Object dato){
         if(evento == TipoEvento.FUNCION_CANCELADA){
             Funcion f = (Funcion) dato;
-            listNotificaciones.add("La funcion de " + f.getPelicula().getTitulo() + " del " + f.getFechaHora() + " fue cancelada. se reembolso tu dinero");
+            listNotificaciones.add("La función de " + f.getPelicula().getTitulo() + " del "
+                    + f.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy 'a las' HH:mm"))
+                    + " fue cancelada. Se reembolsó el 100 % de tu compra.");
         }
     }
 
     public ArrayList<String> getListNotificaciones() {
-        return listNotificaciones;
+        return new ArrayList<>(listNotificaciones);
     }
 
     public String getCedula() {
