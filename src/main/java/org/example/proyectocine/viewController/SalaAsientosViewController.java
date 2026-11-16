@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.example.proyectocine.controller.SalaAsientosController;
 import org.example.proyectocine.model.Asiento;
 import org.example.proyectocine.model.Funcion;
@@ -100,6 +101,12 @@ public class SalaAsientosViewController {
 
         dibujarAsientos();
         actualizarResumen();
+
+        // Los asientos se dibujan después de cargar la pantalla: se reajusta la ventana a su nuevo tamaño
+        if (gridAsientos.getScene() != null && gridAsientos.getScene().getWindow() instanceof Stage ventana) {
+            ventana.sizeToScene();
+            ventana.centerOnScreen();
+        }
     }
 
     /**
@@ -238,8 +245,7 @@ public class SalaAsientosViewController {
 
     @FXML
     private void onVolver() {
-        // Cuando exista la pantalla de película, se volverá a ella
-        SceneManager.cambiarA(Vista.INICIO);
+        SceneManager.cambiarA(Vista.CARTELERA);
     }
 
     private void mostrarMensaje(String texto, boolean esError) {

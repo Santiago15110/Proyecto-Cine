@@ -164,9 +164,9 @@ public class CineFacade {
     // ===================== CARTELERA (ADMIN) =====================
 
     public Pelicula agregarPelicula(String id, String titulo, Genero genero, String clasificacion,
-                                    String descripcion, String rutaPoster) {
+                                    int duracionMin, String descripcion, String rutaPoster) {
         validarAdministrador("gestionar películas");
-        Pelicula pelicula = new Pelicula(id, titulo, genero, clasificacion, descripcion, rutaPoster);
+        Pelicula pelicula = new Pelicula(id, titulo, genero, clasificacion, duracionMin, descripcion, rutaPoster);
         cine.agregarPelicula(pelicula);
         return pelicula;
     }
@@ -210,18 +210,17 @@ public class CineFacade {
      * @param id          identificador de la función
      * @param idPelicula  id de la película
      * @param idSala      id de la sala
-     * @param fechaHora   fecha y hora de inicio
-     * @param duracionMin duración en minutos
+     * @param fechaHora   fecha y hora de inicio (la duración se toma de la película)
      * @param precio      precio base de la entrada
      * @return la función programada
      * @throws CinemaException si la película o la sala no existen, o si el ID de la función ya existe
      */
     public Funcion programarFuncion(String id, String idPelicula, String idSala,
-                                    LocalDateTime fechaHora, int duracionMin, double precio) {
+                                    LocalDateTime fechaHora, double precio) {
         validarAdministrador("programar funciones");
         Pelicula pelicula = buscarPelicula(idPelicula);
         Sala sala = buscarSala(idSala);
-        Funcion funcion = new Funcion(id, pelicula, sala, fechaHora, duracionMin, precio);
+        Funcion funcion = new Funcion(id, pelicula, sala, fechaHora, precio);
         cine.agregarFuncion(funcion);
         return funcion;
     }

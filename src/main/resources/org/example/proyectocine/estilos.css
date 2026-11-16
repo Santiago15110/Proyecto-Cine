@@ -247,3 +247,53 @@
     -fx-font-weight: bold;
     -fx-text-fill: #b71c1c;
 }
+
+/* ===== Cartelera ===== */
+
+.tarjeta-pelicula {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 8, 0, 0, 2);
+}
+
+.tarjeta-pelicula:hover {
+    -fx-border-color: #f0b4b4;
+}
+
+.tarjeta-pelicula-seleccionada,
+.tarjeta-pelicula-seleccionada:hover {
+    -fx-border-color: #b71c1c;
+}
+
+.titulo-tarjeta {
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Botones de fecha y horario (se quedan marcados al elegirlos) */
+.boton-opcion {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 6;
+    -fx-padding: 6 12;
+    -fx-text-fill: #333333;
+    -fx-text-alignment: center;
+    -fx-cursor: hand;
+}
+
+.boton-opcion:hover {
+    -fx-border-color: #b71c1c;
+}
+
+.boton-opcion:selected {
+    -fx-background-color: #b71c1c;
+    -fx-border-color: #b71c1c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

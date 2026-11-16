@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15.0" prefWidth="1000.0" prefHeight="640.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.CarteleraViewController">
+    <padding>
+        <Insets top="20.0" right="25.0" bottom="20.0" left="25.0"/>
+    </padding>
+
+    <!-- Título y filtros -->
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <Label text="Cartelera" styleClass="titulo"/>
+        <HBox HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="txtBuscar" promptText="Buscar por título" prefWidth="220.0"/>
+        <ComboBox fx:id="cmbGenero" prefWidth="170.0"/>
+        <Button text="Limpiar" onAction="#onLimpiarFiltros"/>
+    </HBox>
+
+    <HBox spacing="15.0" VBox.vgrow="ALWAYS">
+
+        <!-- Películas -->
+        <ScrollPane fitToWidth="true" styleClass="scroll-transparente" HBox.hgrow="ALWAYS">
+            <FlowPane fx:id="flowPeliculas" hgap="15.0" vgap="15.0">
+                <padding>
+                    <Insets top="5.0" right="5.0" bottom="5.0" left="5.0"/>
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+
+        <!-- Detalle de la película elegida -->
+        <VBox styleClass="tarjeta" prefWidth="330.0" minWidth="330.0" maxWidth="330.0">
+            <Label fx:id="lblSinSeleccion" text="Elige una película para ver sus funciones"
+                   styleClass="texto-secundario" wrapText="true"/>
+
+            <VBox fx:id="panelDetalle" spacing="12.0">
+                <HBox spacing="12.0">
+                    <StackPane prefWidth="90.0" prefHeight="130.0" minWidth="90.0" minHeight="130.0">
+                        <VBox fx:id="posterVacio" alignment="CENTER" styleClass="poster-vacio">
+                            <padding>
+                                <Insets top="6.0" right="6.0" bottom="6.0" left="6.0"/>
+                            </padding>
+                            <Label fx:id="lblPosterTexto" wrapText="true"/>
+                        </VBox>
+                        <ImageView fx:id="imgPoster" fitWidth="90.0" fitHeight="130.0" preserveRatio="true" visible="false"/>
+                    </StackPane>
+                    <VBox spacing="6.0">
+                        <Label fx:id="lblTitulo" styleClass="subtitulo" wrapText="true"/>
+                        <Label fx:id="lblInfo" styleClass="texto-secundario" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                <Label fx:id="lblDescripcion" wrapText="true"/>
+
+                <Separator/>
+
+                <Label text="FECHA" styleClass="etiqueta-seccion"/>
+                <FlowPane fx:id="flowFechas" hgap="6.0" vgap="6.0"/>
+                <Label fx:id="lblSinFunciones" text="Esta película no tiene funciones disponibles"
+                       styleClass="texto-secundario" wrapText="true"/>
+
+                <Label fx:id="lblHorarios" text="HORARIOS" styleClass="etiqueta-seccion"/>
+                <FlowPane fx:id="flowHorarios" hgap="6.0" vgap="6.0"/>
+
+                <Button fx:id="btnElegirAsientos" text="Elegir asientos" styleClass="boton-principal"
+                        maxWidth="Infinity" defaultButton="true" disable="true" onAction="#onElegirAsientos"/>
+                <Label fx:id="lblMensaje" styleClass="mensaje-error" wrapText="true"/>
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <HBox>
+        <Button text="Volver" cancelButton="true" onAction="#onVolver"/>
+    </HBox>
+</VBox>

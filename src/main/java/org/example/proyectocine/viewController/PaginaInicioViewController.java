@@ -13,6 +13,11 @@ public class PaginaInicioViewController {
     }
 
     @FXML
+    protected void onCarteleraClick() {
+        SceneManager.cambiarA(Vista.CARTELERA);
+    }
+
+    @FXML
     protected void onRegistroClick() {
         SceneManager.cambiarA(Vista.REGISTRO);
     }

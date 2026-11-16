@@ -7,6 +7,7 @@ public enum Vista {
     REGISTRO("RegistroUsuario.fxml", "Registro de usuarios"),
     TARJETA("TarjetaVirtual.fxml", "Mi tarjeta virtual"),
     REPORTES("ReportesView.fxml", "Reporte del Cine"),
+    CARTELERA("Cartelera.fxml", "Cartelera"),
     SALA("SalaAsientos.fxml", "Selección de asientos");
 
     private final String archivo;

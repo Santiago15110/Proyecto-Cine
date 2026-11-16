@@ -10,7 +10,6 @@ public class Funcion implements Sujeto {
     private final Pelicula pelicula;
     private final Sala sala;
     private final LocalDateTime fechaHora;
-    private final int duracionMin;
     private final double precioBase;
     private boolean cancelada;   // la única decisión manual; PROGRAMADA/FINALIZADA se calculan por la hora
     private final Set<Asiento> asientosOcupados;
@@ -22,19 +21,15 @@ public class Funcion implements Sujeto {
      * @param pelicula película que se proyecta
      * @param sala sala de proyección
      * @param fechaHora fecha y hora de inicio
-     * @param duracionMin duración de la función en minutos
      * @param precioBase precio base de la entrada
      */
     public Funcion(String id, Pelicula pelicula, Sala sala, LocalDateTime fechaHora,
-                   int duracionMin, double precioBase) {
+                   double precioBase) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El id de la función es obligatorio");
         }
         if (pelicula == null || sala == null || fechaHora == null) {
             throw new IllegalArgumentException("La película, la sala y la fecha y hora son obligatorias");
-        }
-        if (duracionMin <= 0) {
-            throw new IllegalArgumentException("La duración debe ser mayor que cero");
         }
         if (precioBase < 0) {
             throw new IllegalArgumentException("El precio base no puede ser negativo");
@@ -43,7 +38,6 @@ public class Funcion implements Sujeto {
         this.pelicula = pelicula;
         this.sala = sala;
         this.fechaHora = fechaHora;
-        this.duracionMin = duracionMin;
         this.precioBase = precioBase;
         this.cancelada = false;
         this.asientosOcupados = new HashSet<>();
@@ -133,8 +127,13 @@ public class Funcion implements Sujeto {
         return fechaHora;
     }
 
+    /**
+     * La duración es de la película; la función la toma de ella.
+     *
+     * @return duración en minutos
+     */
     public int getDuracionMin() {
-        return duracionMin;
+        return pelicula.getDuracionMin();
     }
 
     public double getPrecioBase() {
@@ -155,7 +154,7 @@ public class Funcion implements Sujeto {
         if (cancelada) {
             return EstadoFuncion.CANCELADA;
         }
-        if (LocalDateTime.now().isAfter(fechaHora.plusMinutes(duracionMin))) {
+        if (LocalDateTime.now().isAfter(fechaHora.plusMinutes(getDuracionMin()))) {
             return EstadoFuncion.FINALIZADA;
         }
         return EstadoFuncion.PROGRAMADA;

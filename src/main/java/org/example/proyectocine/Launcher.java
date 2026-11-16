@@ -8,7 +8,6 @@ import org.example.proyectocine.model.Pelicula;
 import org.example.proyectocine.model.Sala;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Launcher {
     public static void main(String[] args) {
@@ -24,25 +23,41 @@ public class Launcher {
     private static void cargarDatosDePrueba() {
         Cine cine = Cine.getInstancia();
 
-        // Sala genérica: la pantalla de asientos se dibuja con cualquier cantidad de filas y columnas
-        Sala sala = new Sala("S2", "Sala 2", 8, 12);
-        sala.buscarAsiento('G', 7).setHabilitado(false);
-        sala.buscarAsiento('G', 8).setHabilitado(false);
-        cine.agregarSala(sala);
+        // Salas genéricas: la pantalla de asientos se dibuja con cualquier cantidad de filas y columnas
+        Sala sala1 = new Sala("S1", "Sala 1", 10, 14);
+        Sala sala2 = new Sala("S2", "Sala 2", 8, 12);
+        sala2.buscarAsiento('G', 7).setHabilitado(false);
+        sala2.buscarAsiento('G', 8).setHabilitado(false);
+        cine.agregarSala(sala1);
+        cine.agregarSala(sala2);
 
-        Pelicula pelicula = new Pelicula("P1", "Beyond Horizons", Genero.CIENCIA_FICCION, "+13",
+        Pelicula beyond = new Pelicula("P1", "Beyond Horizons", Genero.CIENCIA_FICCION, "+13", 120,
                 "Una tripulación viaja más allá del borde del universo conocido.", null);
-        pelicula.setEnCartelera(true);
-        cine.agregarPelicula(pelicula);
+        Pelicula risa = new Pelicula("P2", "La última risa", Genero.COMEDIA, "+7", 95,
+                "Un comediante retirado vuelve a los escenarios para salvar su viejo teatro.", null);
+        Pelicula sombras = new Pelicula("P3", "Sombras del pasado", Genero.DRAMA, "+16", 110,
+                "Una familia debe enfrentar un secreto guardado durante veinte años.", null);
+        cine.agregarPelicula(beyond);
+        cine.agregarPelicula(risa);
+        cine.agregarPelicula(sombras);
 
-        LocalDateTime manana = LocalDate.now().plusDays(1).atTime(19, 15);
-        Funcion funcion = new Funcion("F1", pelicula, sala, manana, 120, 16000);
+        LocalDate manana = LocalDate.now().plusDays(1);
+        LocalDate pasado = LocalDate.now().plusDays(2);
+        LocalDate tresDias = LocalDate.now().plusDays(3);
 
-        // Algunos asientos ocupados para que se vea el estado en la pantalla
+        // Función con asientos ocupados para que se vea el estado en la pantalla de asientos
+        Funcion f1 = new Funcion("F1", beyond, sala2, manana.atTime(19, 15), 16000);
         String[] ocupados = {"B4", "C7", "C8", "E4", "F2", "F3", "H5", "H6", "H7"};
         for (String codigo : ocupados) {
-            funcion.reservarAsiento(sala.buscarAsiento(codigo.charAt(0), Integer.parseInt(codigo.substring(1))));
+            f1.reservarAsiento(sala2.buscarAsiento(codigo.charAt(0), Integer.parseInt(codigo.substring(1))));
         }
-        cine.agregarFuncion(funcion);
+        cine.agregarFuncion(f1);
+
+        cine.agregarFuncion(new Funcion("F2", beyond, sala1, manana.atTime(15, 0), 14000));
+        cine.agregarFuncion(new Funcion("F3", beyond, sala1, pasado.atTime(20, 0), 16000));
+        cine.agregarFuncion(new Funcion("F4", risa, sala2, manana.atTime(16, 30), 14000));
+        cine.agregarFuncion(new Funcion("F5", risa, sala2, pasado.atTime(18, 0), 16000));
+        cine.agregarFuncion(new Funcion("F6", sombras, sala1, manana.atTime(21, 0), 16000));
+        cine.agregarFuncion(new Funcion("F7", sombras, sala2, tresDias.atTime(19, 0), 16000));
     }
 }

@@ -8,6 +8,7 @@ public class Pelicula {
     private String titulo;
     private Genero genero;
     private String clasificacion;
+    private int duracionMin;
     private String descripcion;
     private String rutaPoster;
     private boolean enCartelera;
@@ -18,20 +19,23 @@ public class Pelicula {
      * @param titulo título de la película
      * @param genero género de la película
      * @param clasificacion clasificación por edades
+     * @param duracionMin duración de la película en minutos
      * @param descripcion descripción breve
      * @param rutaPoster ruta de la imagen del póster
      */
     public Pelicula(String id, String titulo, Genero genero, String clasificacion,
-                    String descripcion, String rutaPoster) {
+                    int duracionMin, String descripcion, String rutaPoster) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El id de la película es obligatorio");
         }
         validarTitulo(titulo);
         validarGenero(genero);
+        validarDuracion(duracionMin);
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
         this.clasificacion = clasificacion;
+        this.duracionMin = duracionMin;
         this.descripcion = descripcion;
         this.rutaPoster = rutaPoster;
         this.enCartelera = true;
@@ -46,6 +50,12 @@ public class Pelicula {
     private void validarGenero(Genero genero) {
         if (genero == null) {
             throw new IllegalArgumentException("El género de la película es obligatorio");
+        }
+    }
+
+    private void validarDuracion(int duracionMin) {
+        if (duracionMin <= 0) {
+            throw new IllegalArgumentException("La duración de la película debe ser mayor que cero");
         }
     }
 
@@ -77,6 +87,15 @@ public class Pelicula {
 
     public void setClasificacion(String clasificacion) {
         this.clasificacion = clasificacion;
+    }
+
+    public int getDuracionMin() {
+        return duracionMin;
+    }
+
+    public void setDuracionMin(int duracionMin) {
+        validarDuracion(duracionMin);
+        this.duracionMin = duracionMin;
     }
 
     public String getDescripcion() {

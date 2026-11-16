@@ -12,6 +12,7 @@
 
     <Label fx:id="welcomeText" />
     <Button onAction="#onHelloButtonClick" text="Hello!" />
+    <Button onAction="#onCarteleraClick" text="Cartelera" />
     <Button onAction="#onRegistroClick" text="Registro de usuarios" />
     <Button onAction="#onTarjetaClick" text="Mi tarjeta" />
 
