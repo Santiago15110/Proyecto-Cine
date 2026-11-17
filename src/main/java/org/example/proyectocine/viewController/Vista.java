@@ -11,7 +11,8 @@ public enum Vista {
     REPORTES("ReportesView.fxml", "Reporte del Cine"),
     CARTELERA("Cartelera.fxml", "Cartelera"),
     SALA("SalaAsientos.fxml", "Selección de asientos"),
-    PAGO("ConfiteriaPago.fxml", "Confitería y pago");
+    PAGO("ConfiteriaPago.fxml", "Confitería y pago"),
+    MIS_COMPRAS("MisCompras.fxml", "Mis compras");
 
     private final String archivo;
     private final String titulo;

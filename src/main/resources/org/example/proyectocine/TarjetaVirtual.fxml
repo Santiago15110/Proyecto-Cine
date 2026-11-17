@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -50,7 +51,18 @@
         </HBox>
 
         <Label fx:id="lblAviso" wrapText="true"
-               text="¿Necesitas más saldo? Las recargas las realiza el administrador del cine."/>
+               text="¿Necesitas más saldo? Solicita una recarga y el administrador del cine la aprobará."/>
+
+        <!-- Solicitud de recarga: el saldo cambia cuando el administrador la aprueba -->
+        <VBox spacing="10.0" styleClass="tarjeta">
+            <Label text="Solicitar recarga" styleClass="subtitulo"/>
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <TextField fx:id="txtMontoRecarga" promptText="Monto, ejemplo: 50000" prefWidth="220.0"
+                           onAction="#onSolicitarRecarga"/>
+                <Button text="Solicitar recarga" styleClass="boton-principal" onAction="#onSolicitarRecarga"/>
+            </HBox>
+            <Label fx:id="lblMensajeRecarga" wrapText="true"/>
+        </VBox>
 
         <TabPane tabClosingPolicy="UNAVAILABLE" prefHeight="240.0">
             <Tab text="Movimientos">
@@ -86,6 +98,22 @@
                     </columnResizePolicy>
                     <placeholder>
                         <Label text="Todavía no tienes puntos"/>
+                    </placeholder>
+                </TableView>
+            </Tab>
+            <Tab fx:id="tabSolicitudes" text="Mis solicitudes de recarga">
+                <TableView fx:id="tblSolicitudes">
+                    <columns>
+                        <TableColumn fx:id="colSolFecha" text="Fecha de solicitud" prefWidth="150.0"/>
+                        <TableColumn fx:id="colSolMonto" text="Monto" prefWidth="110.0"/>
+                        <TableColumn fx:id="colSolEstado" text="Estado" prefWidth="110.0"/>
+                        <TableColumn fx:id="colSolRespuesta" text="Fecha de respuesta" prefWidth="150.0"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <placeholder>
+                        <Label text="Todavía no has solicitado recargas"/>
                     </placeholder>
                 </TableView>
             </Tab>
