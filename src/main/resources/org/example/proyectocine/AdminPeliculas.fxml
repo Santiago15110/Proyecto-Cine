@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="16.0" prefWidth="880.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.AdminPeliculasViewController">
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox spacing="2.0">
+            <Label text="Gestión de películas" styleClass="titulo"/>
+            <Label text="Administra el catálogo de películas y controla su disponibilidad en cartelera"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Volver al panel" onAction="#onVolver"/>
+    </HBox>
+
+    <VBox spacing="10.0" styleClass="tarjeta">
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label text="Catálogo de películas" styleClass="subtitulo"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Retirar de cartelera" onAction="#onRetirarCartelera"/>
+            <Button text="Poner en cartelera" onAction="#onPonerCartelera"/>
+        </HBox>
+
+        <TableView fx:id="tblPeliculas" prefHeight="200.0">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="80.0"/>
+                <TableColumn fx:id="colTitulo" text="Título" prefWidth="240.0"/>
+                <TableColumn fx:id="colGenero" text="Género" prefWidth="120.0"/>
+                <TableColumn fx:id="colClasificacion" text="Clasificación" prefWidth="110.0"/>
+                <TableColumn fx:id="colDuracion" text="Duración" prefWidth="100.0"/>
+                <TableColumn fx:id="colEstado" text="Estado" prefWidth="120.0"/>
+            </columns>
+            <placeholder>
+                <Label text="No hay películas registradas"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+
+    <VBox spacing="12.0" styleClass="tarjeta">
+        <Label text="Agregar nueva película" styleClass="subtitulo"/>
+
+        <GridPane hgap="12.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="110.0"/>
+                <ColumnConstraints prefWidth="260.0"/>
+                <ColumnConstraints prefWidth="110.0"/>
+                <ColumnConstraints prefWidth="260.0"/>
+            </columnConstraints>
+
+            <Label text="ID película:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtId" promptText="Ej: P07" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Título:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <TextField fx:id="txtTitulo" promptText="Ej: Interestelar" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+            <Label text="Género:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cmbGenero" promptText="Selecciona género" maxWidth="Infinity" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Clasificación:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <TextField fx:id="txtClasificacion" promptText="Ej: +12 o PG-13" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+            <Label text="Duración (min):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtDuracion" promptText="Ej: 145" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Ruta póster:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+            <TextField fx:id="txtRutaPoster" promptText="Opcional (ej: /posters/p07.png)" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+            <Label text="Sinopsis:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtDescripcion" promptText="Breve descripción de la película" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+        </GridPane>
+
+        <HBox alignment="CENTER_LEFT" spacing="12.0">
+            <Button text="Agregar película" onAction="#onAgregarPelicula"/>
+            <Label fx:id="lblMensaje" text=""/>
+        </HBox>
+    </VBox>
+</VBox>

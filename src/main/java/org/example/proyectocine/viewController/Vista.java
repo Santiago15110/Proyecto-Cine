@@ -12,7 +12,14 @@ public enum Vista {
     CARTELERA("Cartelera.fxml", "Cartelera"),
     SALA("SalaAsientos.fxml", "Selección de asientos"),
     PAGO("ConfiteriaPago.fxml", "Confitería y pago"),
-    MIS_COMPRAS("MisCompras.fxml", "Mis compras");
+    MIS_COMPRAS("MisCompras.fxml", "Mis compras"),
+    ADMIN_CLIENTES("AdminClientes.fxml","Gestión de Clientes"),
+    ADMIN_FUNCIONES("AdminFunciones.fxml", "CinemaUQ - Gestión de Funciones"),
+    ADMIN_PELICULAS("AdminPeliculas.fxml", "CinemaUQ - Gestión de Películas"),
+    ADMIN_SALAS("AdminSalas.fxml", "CinemaUQ - Gestión de Salas"),
+    ADMIN_CONFITERIA("AdminConfiteria.fxml", "CinemaUQ - Gestión de Confitería"),
+    ADMIN_PROMOCIONES("AdminPromociones.fxml", "CinemaUQ - Gestión de Promociones"),
+    ADMIN_COMPRAS("AdminCompras.fxml", "CinemaUQ - Historial de Compras");
 
     private final String archivo;
     private final String titulo;
