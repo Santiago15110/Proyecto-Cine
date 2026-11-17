@@ -25,11 +25,6 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- * Pantalla de selección de asientos de una función.
- * La cuadrícula se arma con las filas y columnas de la sala, así que sirve para cualquier sala.
- * Quien abra esta pantalla debe llamar a {@link #mostrarFuncion(Funcion)}.
- */
 public class SalaAsientosViewController {
 
     private static final Locale COLOMBIA = new Locale("es", "CO");
@@ -38,16 +33,13 @@ public class SalaAsientosViewController {
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("EEE d 'de' MMM", COLOMBIA);
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("h:mm a", COLOMBIA);
 
-    // Barra superior
     @FXML private Label lblPeliculaBarra;
     @FXML private Label lblFechaBarra;
     @FXML private Label lblHoraBarra;
     @FXML private Label lblSalaBarra;
 
-    // Mapa de asientos
     @FXML private GridPane gridAsientos;
 
-    // Resumen lateral
     @FXML private ImageView imgPoster;
     @FXML private VBox posterVacio;
     @FXML private Label lblTitulo;
@@ -64,7 +56,6 @@ public class SalaAsientosViewController {
 
     private final SalaAsientosController salaController = new SalaAsientosController();
 
-    /** Asientos elegidos, en el orden en que se hizo clic. */
     private final Set<Asiento> seleccionados = new LinkedHashSet<>();
     private Funcion funcion;
 
@@ -102,16 +93,12 @@ public class SalaAsientosViewController {
         dibujarAsientos();
         actualizarResumen();
 
-        // Los asientos se dibujan después de cargar la pantalla: se reajusta la ventana a su nuevo tamaño
         if (gridAsientos.getScene() != null && gridAsientos.getScene().getWindow() instanceof Stage ventana) {
             ventana.sizeToScene();
             ventana.centerOnScreen();
         }
     }
 
-    /**
-     * Devuelve los asientos elegidos, para pasarlos al siguiente paso de la compra.
-     */
     public ArrayList<Asiento> getAsientosSeleccionados() {
         return new ArrayList<>(seleccionados);
     }
@@ -119,8 +106,6 @@ public class SalaAsientosViewController {
     public Funcion getFuncion() {
         return funcion;
     }
-
-    // ===================== MAPA DE ASIENTOS =====================
 
     private void dibujarAsientos() {
         gridAsientos.getChildren().clear();
@@ -175,8 +160,6 @@ public class SalaAsientosViewController {
         actualizarResumen();
     }
 
-    // ===================== RESUMEN =====================
-
     private void actualizarResumen() {
         flowSeleccionados.getChildren().clear();
         if (seleccionados.isEmpty()) {
@@ -228,8 +211,6 @@ public class SalaAsientosViewController {
     private static String capitalizar(String texto) {
         return texto.isEmpty() ? texto : Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
     }
-
-    // ===================== BOTONES =====================
 
     @FXML
     private void onContinuar() {

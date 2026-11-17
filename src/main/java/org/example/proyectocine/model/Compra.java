@@ -65,16 +65,10 @@ public class Compra {
         return total;
     }
 
-    /**
-     * Confirma la compra; el comportamiento depende del estado actual
-     */
     public void confirmar() {
         estado.confirmar(this);
     }
 
-    /**
-     * Cancela la compra; el comportamiento depende del estado actual
-     */
     public void cancelar() {
         estado.cancelar(this);
     }

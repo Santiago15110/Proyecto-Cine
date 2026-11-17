@@ -3,15 +3,6 @@ package org.example.proyectocine.model;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-/**
- * Regla de reembolso por cancelación del cliente según el tiempo que falta para la función:
- * <ul>
- *     <li>Más de 24 horas: se devuelve el 100 %.</li>
- *     <li>Entre 2 y 24 horas: se devuelve el 80 %.</li>
- *     <li>Menos de 2 horas: no se permite cancelar.</li>
- * </ul>
- * Si el cine cancela la función siempre se devuelve el 100 % (eso lo maneja {@link CineFacade}).
- */
 public class PoliticaReembolso {
 
     private static final long MINUTOS_REEMBOLSO_TOTAL = 24 * 60;

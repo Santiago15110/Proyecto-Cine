@@ -54,9 +54,6 @@ public class ReporteVentas extends ReporteStrategy{
         return datosGrafico;
     }
 
-    /**
-     * metodo interno para auxiliar el filtro de las fechas
-     */
     private Map<String, DatosPeliculaReporte> procesarVentasPorPelicula() {
         Map<String, DatosPeliculaReporte> mapa = new HashMap<>();
 
@@ -66,7 +63,6 @@ public class ReporteVentas extends ReporteStrategy{
             if (fechaInicio != null && fechaCompra.isBefore(fechaInicio)) dentroDeRango = false;
             if (fechaFin != null && fechaCompra.isAfter(fechaFin)) dentroDeRango = false;
 
-            // Solo cuentan las compras pagadas; las pagadas con puntos suman entradas pero no dinero
             if (dentroDeRango && compra.getFuncion() != null && compra.getEstado() instanceof EstadoPagada) {
                 String nombrePelicula = compra.getFuncion().getPelicula().getTitulo();
                 int cantEntradas = compra.getEntradas().size();
@@ -81,9 +77,6 @@ public class ReporteVentas extends ReporteStrategy{
         return mapa;
     }
 
-    /**
-     * Clase auxiliar interna para acumular métricas por película.
-     */
     private static class DatosPeliculaReporte {
         int entradas = 0;
         double totalDinero = 0.0;

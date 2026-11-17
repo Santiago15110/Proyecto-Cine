@@ -12,7 +12,6 @@ public class TarjetaVirtual {
     private ArrayList<MovimientoSaldo> listMovimientos;
     private boolean activa;
 
-
     public TarjetaVirtual(Cliente theCliente) {
         this.numero = theCliente.getCedula();
         this.theCliente = theCliente;
@@ -56,9 +55,6 @@ public class TarjetaVirtual {
         return activa;
     }
 
-
-
-
     /**
      * Descuenta dinero del saldo de la tarjeta, por ejemplo al pagar una compra.
      * @param monto valor a descontar
@@ -91,7 +87,6 @@ public class TarjetaVirtual {
         listMovimientos.add(new MovimientoSaldo(TipoMovimiento.PAGO, monto, LocalDate.now(), LocalTime.now(), saldo, descripcion));
     }
 
-
     /**
      * Metodo para el reembolso
      * @param monto
@@ -106,7 +101,6 @@ public class TarjetaVirtual {
         saldo += monto;
         listMovimientos.add(new MovimientoSaldo(TipoMovimiento.REEMBOLSO, monto, LocalDate.now(), LocalTime.now(), saldo, descripcion));
     }
-
 
     public String getNumero() {
         return numero;

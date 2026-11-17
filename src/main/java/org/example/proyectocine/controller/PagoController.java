@@ -13,11 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Intermediario entre la pantalla de confitería y pago y el modelo.
- * Recibe lo que el cliente eligió (función, asientos, productos y promoción) y se lo pasa
- * al {@link CineFacade} con datos simples. No usa nada de JavaFX.
- */
 public class PagoController {
 
     private final CineFacade facade;
@@ -47,18 +42,12 @@ public class PagoController {
         return facade.consultarPuntos(cliente.getCedula());
     }
 
-    /**
-     * Total que se pagaría con saldo, con la promoción aplicada (si hay).
-     */
     public double cotizar(Cliente cliente, Funcion funcion, List<Asiento> asientos,
                           Map<String, Integer> productos, Promocion promocion) {
         return facade.cotizarCompra(cliente.getCedula(), idFuncion(funcion), codigos(asientos),
                 productos, promociones(promocion));
     }
 
-    /**
-     * Puntos que costaría la misma compra si se paga con puntos.
-     */
     public int costoEnPuntos(Funcion funcion, List<Asiento> asientos, Map<String, Integer> productos) {
         return facade.consultarCostoEnPuntos(idFuncion(funcion), codigos(asientos), productos);
     }

@@ -11,7 +11,7 @@ public class Funcion implements Sujeto {
     private final Sala sala;
     private final LocalDateTime fechaHora;
     private final double precioBase;
-    private boolean cancelada;   // la única decisión manual; PROGRAMADA/FINALIZADA se calculan por la hora
+    private boolean cancelada;
     private final Set<Asiento> asientosOcupados;
     private final ArrayList<Observador> listObservadores = new ArrayList<>();
 
@@ -185,8 +185,6 @@ public class Funcion implements Sujeto {
         return pelicula.getTitulo() + " - " + sala.getNombre() + " - " + fechaHora;
     }
 
-
-
     @Override
     public void agregarObservador(Observador o){
         if(!listObservadores.contains(o)){
@@ -194,12 +192,10 @@ public class Funcion implements Sujeto {
         }
     }
 
-
     @Override
     public void eliminarObservador(Observador o){
         listObservadores.remove(o);
     }
-
 
     @Override
     public void notificarObservador(TipoEvento evento, Object dato){

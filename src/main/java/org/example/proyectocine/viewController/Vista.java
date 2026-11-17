@@ -1,8 +1,8 @@
 package org.example.proyectocine.viewController;
 
-
 public enum Vista {
 
+    BIENVENIDA("Bienvenida.fxml", "CinemaUQ - Bienvenido"),
     LOGIN("Login.fxml", "CinemaUQ - Iniciar sesión"),
     REGISTRO("RegistroUsuario.fxml", "CinemaUQ - Crear cuenta"),
     PANEL_CLIENTE("PanelCliente.fxml", "CinemaUQ"),

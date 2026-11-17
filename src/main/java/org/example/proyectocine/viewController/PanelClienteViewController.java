@@ -11,10 +11,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * Panel principal del cliente: resumen de saldo, puntos y compras, accesos a sus pantallas
- * y las notificaciones que recibe cuando el cine cancela una función.
- */
 public class PanelClienteViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
@@ -61,7 +57,7 @@ public class PanelClienteViewController {
     @FXML
     private void onCerrarSesion() {
         panelController.cerrarSesion();
-        SceneManager.cambiarA(Vista.LOGIN);
+        SceneManager.cambiarA(Vista.BIENVENIDA);
     }
 
     private static String primerNombre(String nombre) {

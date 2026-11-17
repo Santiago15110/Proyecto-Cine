@@ -28,10 +28,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Pantalla de cartelera: el cliente busca una película, ve su detalle
- * y elige la fecha y la hora de la función para pasar a los asientos.
- */
 public class CarteleraViewController {
 
     private static final Locale COLOMBIA = new Locale("es", "CO");
@@ -39,12 +35,10 @@ public class CarteleraViewController {
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("h:mm a", COLOMBIA);
     private static final String TODOS_LOS_GENEROS = "Todos los géneros";
 
-    // Filtros y lista de películas
     @FXML private TextField txtBuscar;
     @FXML private ComboBox<String> cmbGenero;
     @FXML private FlowPane flowPeliculas;
 
-    // Detalle
     @FXML private Label lblSinSeleccion;
     @FXML private VBox panelDetalle;
     @FXML private ImageView imgPoster;
@@ -80,8 +74,6 @@ public class CarteleraViewController {
         mostrarDetalle(false);
         refrescarPeliculas();
     }
-
-    // ===================== LISTA DE PELÍCULAS =====================
 
     private void refrescarPeliculas() {
         flowPeliculas.getChildren().clear();
@@ -130,8 +122,6 @@ public class CarteleraViewController {
         tarjeta.getStyleClass().add("tarjeta-pelicula-seleccionada");
     }
 
-    // ===================== DETALLE Y FUNCIONES =====================
-
     private void seleccionarPelicula(Pelicula pelicula) {
         peliculaSeleccionada = pelicula;
         funcionSeleccionada = null;
@@ -153,7 +143,6 @@ public class CarteleraViewController {
         flowFechas.getChildren().clear();
         flowHorarios.getChildren().clear();
 
-        // Las funciones ya vienen ordenadas; se agrupan por día conservando el orden
         Map<LocalDate, List<Funcion>> porFecha = new LinkedHashMap<>();
         for (Funcion f : funciones) {
             porFecha.computeIfAbsent(f.getFechaHora().toLocalDate(), d -> new ArrayList<>()).add(f);
@@ -174,7 +163,7 @@ public class CarteleraViewController {
                 if (boton.isSelected()) {
                     cargarHorarios(dia.getValue());
                 } else {
-                    boton.setSelected(true); // siempre debe quedar una fecha elegida
+                    boton.setSelected(true);
                 }
             });
             flowFechas.getChildren().add(boton);
@@ -218,8 +207,6 @@ public class CarteleraViewController {
         lblSinSeleccion.setManaged(!visible);
     }
 
-    // ===================== BOTONES =====================
-
     @FXML
     private void onElegirAsientos() {
         if (funcionSeleccionada == null) {
@@ -241,8 +228,6 @@ public class CarteleraViewController {
         Navegacion.irAlPanel();
     }
 
-    // ===================== AUXILIARES =====================
-
     private Genero generoElegido() {
         String valor = cmbGenero.getValue();
         if (valor == null || valor.equals(TODOS_LOS_GENEROS)) {
@@ -256,7 +241,6 @@ public class CarteleraViewController {
         return null;
     }
 
-    /** CIENCIA_FICCION → "Ciencia ficcion" */
     private static String nombreGenero(Genero genero) {
         String texto = genero.name().replace('_', ' ').toLowerCase();
         return Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
@@ -278,7 +262,6 @@ public class CarteleraViewController {
         return Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
     }
 
-    /** Póster de la tarjeta: la imagen si existe, si no un recuadro con el título. */
     private StackPane crearPoster(Pelicula pelicula, double ancho, double alto) {
         StackPane contenedor = new StackPane();
         contenedor.setPrefSize(ancho, alto);
@@ -313,7 +296,6 @@ public class CarteleraViewController {
         lblPosterTexto.setText(titulo);
     }
 
-    /** Busca la imagen como recurso del proyecto o como archivo; null si no existe. */
     private Image buscarImagen(String ruta) {
         if (ruta == null || ruta.isBlank()) {
             return null;

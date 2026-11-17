@@ -28,11 +28,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Último paso de la compra: el cliente agrega confitería (opcional), elige una promoción vigente
- * y paga con el saldo de su tarjeta o con sus puntos.
- * Se abre desde la selección de asientos con {@link #iniciar(Funcion, List)}.
- */
 public class ConfiteriaPagoViewController {
 
     private static final Locale COLOMBIA = Locale.of("es", "CO");
@@ -70,7 +65,6 @@ public class ConfiteriaPagoViewController {
 
     private final PagoController pagoController = new PagoController();
 
-    /** Productos elegidos: producto o combo → cantidad (en el orden en que se agregaron). */
     private final Map<ItemConfiteria, Integer> carrito = new LinkedHashMap<>();
 
     private Cliente cliente;
@@ -176,8 +170,6 @@ public class ConfiteriaPagoViewController {
         Navegacion.irAlPanel();
     }
 
-    // ===================== AUXILIARES =====================
-
     private void refrescarCarrito() {
         ArrayList<LineaPedido> lineas = new ArrayList<>();
         carrito.forEach((item, cantidad) -> lineas.add(new LineaPedido(item, cantidad)));
@@ -202,7 +194,6 @@ public class ConfiteriaPagoViewController {
             return;
         }
         try {
-            // El total real lo calcula el modelo (Decorator con la promoción)
             double total = pagoController.cotizar(cliente, funcion, asientos, productosParaPagar(), promocionElegida());
             lblTotal.setText(FORMATO_PESOS.format(total));
             lblTotalPuntos.setText(pagoController.costoEnPuntos(funcion, asientos, productosParaPagar()) + " pts");
@@ -247,11 +238,9 @@ public class ConfiteriaPagoViewController {
         return texto.isEmpty() ? texto : Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
     }
 
-    /** Una fila del pedido de confitería. */
     public record LineaPedido(ItemConfiteria item, int cantidad) {
     }
 
-    /** Opción del combo de promociones; sin promoción cuando es null. */
     public record OpcionPromocion(Promocion promocion) {
         @Override
         public String toString() {

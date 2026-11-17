@@ -39,19 +39,10 @@ public abstract class ReporteStrategy {
         this(titulo, null, null);
     }
 
-    /**
-     * Genera el reporte en formato de texto plano tabular,
-     */
     public abstract String generarContenidoTexto();
 
-    /**
-     * Devuelve los datos procesados en pares clave-valor
-     */
     public abstract Map<String, Number> obtenerDatosGrafico();
 
-    /**
-     * Construye el encabezado.
-     */
     protected String construirEncabezado() {
         StringBuilder sb = new StringBuilder();
         sb.append(titulo).append(" - CinemaUQ\n");

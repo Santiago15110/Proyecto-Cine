@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class ReporteConfiteria extends ReporteStrategy {
 
     private final List<Compra> comprasTotales;
@@ -76,7 +75,6 @@ public class ReporteConfiteria extends ReporteStrategy {
             if (fechaInicio != null && fechaCompra.isBefore(fechaInicio)) dentroDeRango = false;
             if (fechaFin != null && fechaCompra.isAfter(fechaFin)) dentroDeRango = false;
 
-            // Solo cuentan las compras pagadas (no las canceladas)
             if (dentroDeRango && compra.getEstado() instanceof EstadoPagada && compra.getLineas() != null) {
                 for (LineaProducto linea : compra.getLineas()) {
                     String nombreItem = linea.getItem().getNombre();

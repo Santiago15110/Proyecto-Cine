@@ -1,9 +1,5 @@
 package org.example.proyectocine.model;
 
-/**
- * Usuario administrador del cine.
- * Se identifica con un código de administrador además de los datos de {@link Usuario}.
- */
 public class Admin extends Usuario {
 
     private String codigo;

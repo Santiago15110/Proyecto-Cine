@@ -20,7 +20,6 @@
         <Insets top="20.0" right="25.0" bottom="20.0" left="25.0"/>
     </padding>
 
-    <!-- Título y filtros -->
     <HBox spacing="10.0" alignment="CENTER_LEFT">
         <Label text="Cartelera" styleClass="titulo"/>
         <HBox HBox.hgrow="ALWAYS"/>
@@ -31,7 +30,6 @@
 
     <HBox spacing="15.0" VBox.vgrow="ALWAYS">
 
-        <!-- Películas -->
         <ScrollPane fitToWidth="true" styleClass="scroll-transparente" HBox.hgrow="ALWAYS">
             <FlowPane fx:id="flowPeliculas" hgap="15.0" vgap="15.0">
                 <padding>
@@ -40,7 +38,6 @@
             </FlowPane>
         </ScrollPane>
 
-        <!-- Detalle de la película elegida -->
         <VBox styleClass="tarjeta" prefWidth="330.0" minWidth="330.0" maxWidth="330.0">
             <Label fx:id="lblSinSeleccion" text="Elige una película para ver sus funciones"
                    styleClass="texto-secundario" wrapText="true"/>

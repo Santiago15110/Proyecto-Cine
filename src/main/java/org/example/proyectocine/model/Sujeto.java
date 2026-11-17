@@ -6,5 +6,4 @@ public interface Sujeto {
     void eliminarObservador(Observador o);
     void notificarObservador(TipoEvento tipoEvento, Object dato);
 
-
 }

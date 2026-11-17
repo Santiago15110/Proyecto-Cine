@@ -2,21 +2,6 @@ package org.example.proyectocine.model;
 
 import java.time.LocalDate;
 
-/**
- * Tipos de reporte que puede elegir el administrador (patrón Factory Method).
- * <p>
- * Cada constante sobrescribe el método fábrica {@link #crear(Cine, LocalDate, LocalDate)} y decide
- * qué {@link ReporteStrategy} concreto construir y con qué datos. Así, quien pide un reporte
- * (el Facade o la pantalla) no necesita conocer las clases ReporteVentas, ReporteRecargas, etc.,
- * y agregar un reporte nuevo es agregar una constante, sin modificar a quien los usa.
- * </p>
- * <ul>
- *     <li>Producto: {@link ReporteStrategy}</li>
- *     <li>Productos concretos: ReporteVentas, ReporteEntradasFuncion, ...</li>
- *     <li>Creador: {@link TipoReporte} con el método fábrica {@code crear}</li>
- *     <li>Creadores concretos: cada constante (VENTAS, RECARGAS, ...)</li>
- * </ul>
- */
 public enum TipoReporte {
 
     VENTAS("Ventas por periodo", true) {

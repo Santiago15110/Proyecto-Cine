@@ -4,11 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-/**
- * Cuenta de puntos CinemaUQ de un cliente.
- * Cada acumulación se guarda como un {@link RegistroPuntos} con su propia fecha y vence un año
- * después de obtenida. Al redimir se usan primero los puntos más próximos a vencer.
- */
 public class AcumulacionPunto {
 
     private final ArrayList<RegistroPuntos> listRegistros = new ArrayList<>();

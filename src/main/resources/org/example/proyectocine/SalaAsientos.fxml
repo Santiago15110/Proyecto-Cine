@@ -22,7 +22,6 @@
 
     <Label text="Elige tus asientos" styleClass="titulo"/>
 
-    <!-- Barra con los datos de la función -->
     <HBox spacing="40.0" alignment="CENTER_LEFT" styleClass="tarjeta">
         <padding>
             <Insets top="10.0" right="20.0" bottom="10.0" left="20.0"/>
@@ -35,7 +34,6 @@
 
     <HBox spacing="15.0">
 
-        <!-- Mapa de la sala -->
         <VBox spacing="12.0" alignment="TOP_CENTER" styleClass="tarjeta" HBox.hgrow="ALWAYS">
             <Label text="PANTALLA" styleClass="texto-pantalla"/>
             <Region styleClass="pantalla-cine" maxWidth="420.0"/>
@@ -50,7 +48,6 @@
                 </StackPane>
             </ScrollPane>
 
-            <!-- Leyenda -->
             <HBox spacing="18.0" alignment="CENTER">
                 <HBox spacing="6.0" alignment="CENTER_LEFT">
                     <Region styleClass="muestra-leyenda, asiento-disponible"/>
@@ -71,7 +68,6 @@
             </HBox>
         </VBox>
 
-        <!-- Resumen de la compra -->
         <VBox spacing="12.0" styleClass="tarjeta" prefWidth="290.0" minWidth="290.0">
             <HBox spacing="12.0">
                 <StackPane prefWidth="80.0" prefHeight="115.0" minWidth="80.0" minHeight="115.0">

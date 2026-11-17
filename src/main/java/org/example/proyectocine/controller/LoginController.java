@@ -4,10 +4,6 @@ import org.example.proyectocine.model.Admin;
 import org.example.proyectocine.model.CineFacade;
 import org.example.proyectocine.model.Usuario;
 
-/**
- * Intermediario entre la pantalla de inicio de sesión y el modelo.
- * No usa nada de JavaFX: recibe datos simples y trabaja con {@link CineFacade}.
- */
 public class LoginController {
 
     private final CineFacade facade;

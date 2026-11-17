@@ -22,7 +22,6 @@
     <Label text="Confitería y pago" styleClass="titulo"/>
 
     <HBox spacing="18.0">
-        <!-- Izquierda: confitería -->
         <VBox spacing="10.0" HBox.hgrow="ALWAYS">
             <VBox spacing="10.0" styleClass="tarjeta">
                 <Label text="Agrega productos o combos (opcional)" styleClass="subtitulo"/>
@@ -64,7 +63,6 @@
             </VBox>
         </VBox>
 
-        <!-- Derecha: resumen y pago -->
         <VBox spacing="10.0" styleClass="tarjeta" prefWidth="360.0" minWidth="340.0">
             <Label text="Resumen de tu compra" styleClass="subtitulo"/>
             <Label fx:id="lblPelicula" text="Película" styleClass="dato-mediano" wrapText="true"/>

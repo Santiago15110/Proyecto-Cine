@@ -3,11 +3,6 @@ package org.example.proyectocine.model;
 import java.util.ArrayList;
 import java.util.Objects;
 
-/**
- * Combo de la confitería (compuesto del patrón Composite).
- * Contiene productos u otros combos, y su precio se calcula sumando el de sus ítems
- * y aplicando un porcentaje de descuento.
- */
 public class Combo implements ItemConfiteria {
 
     private final String id;

@@ -19,11 +19,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-/**
- * Pantalla "Mi tarjeta": el cliente que inició sesión consulta su saldo, el estado de su tarjeta,
- * sus movimientos y sus puntos con sus fechas de vencimiento. No permite recargar
- * (según el enunciado, solo el administrador recarga).
- */
 public class TarjetaViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
@@ -60,12 +55,10 @@ public class TarjetaViewController {
 
     private final TarjetaController tarjetaController = new TarjetaController();
 
-    /** Cliente cuya tarjeta se está mostrando (el de la sesión). */
     private Cliente cliente;
 
     @FXML
     private void initialize() {
-        // Como MovimientoSaldo es un record, sus "getters" no llevan get: fecha(), monto(), ...
         colFecha.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().fecha().format(FORMATO_FECHA)));
         colHora.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().hora().format(FORMATO_HORA)));
         colTipo.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().tipoMovimiento().toString()));
@@ -82,7 +75,6 @@ public class TarjetaViewController {
                 c.getValue().getReferencia() == null || c.getValue().getReferencia().isBlank()
                         ? "-" : c.getValue().getReferencia()));
 
-        // Al abrir la pantalla se muestra la tarjeta de quien inició sesión
         mostrarCliente(tarjetaController.obtenerClienteEnSesion());
     }
 

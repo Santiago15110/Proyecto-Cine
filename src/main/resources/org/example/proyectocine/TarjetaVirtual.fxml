@@ -20,13 +20,11 @@
 
     <Label text="Mi tarjeta virtual" styleClass="titulo"/>
 
-    <!-- Se muestra si nadie ha iniciado sesión como cliente -->
     <Label fx:id="lblSinSesion" text="Inicia sesión como cliente para ver tu tarjeta."
            styleClass="mensaje-error" wrapText="true"/>
 
     <VBox fx:id="contenido" spacing="15.0">
 
-        <!-- Tarjeta y puntos -->
         <HBox spacing="15.0">
             <VBox spacing="6.0" styleClass="tarjeta-virtual" HBox.hgrow="ALWAYS">
                 <HBox alignment="CENTER_LEFT">
@@ -54,7 +52,6 @@
         <Label fx:id="lblAviso" wrapText="true"
                text="¿Necesitas más saldo? Las recargas las realiza el administrador del cine."/>
 
-        <!-- Historiales -->
         <TabPane tabClosingPolicy="UNAVAILABLE" prefHeight="240.0">
             <Tab text="Movimientos">
                 <TableView fx:id="tblMovimientos">

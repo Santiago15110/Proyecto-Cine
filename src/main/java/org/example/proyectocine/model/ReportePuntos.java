@@ -6,9 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Estrategia concreta para el reporte de puntos acumulados y redimidos por los clientes.
- */
 public class ReportePuntos extends ReporteStrategy {
 
     private final List<Cliente> clientesTotales;

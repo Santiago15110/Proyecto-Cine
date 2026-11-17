@@ -11,11 +11,6 @@ import org.example.proyectocine.model.Usuario;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-/**
- * Intermediario entre la pantalla "Mi tarjeta" y el modelo.
- * Es solo de consulta: según el enunciado, únicamente el administrador puede recargar.
- * No usa nada de JavaFX: trabaja con {@link CineFacade}.
- */
 public class TarjetaController {
 
     private final CineFacade facade;

@@ -7,9 +7,6 @@ import org.example.proyectocine.model.Pelicula;
 
 import java.util.ArrayList;
 
-/**
- * Puente entre la pantalla de cartelera y el modelo.
- */
 public class CarteleraController {
 
     private final CineFacade facade;
@@ -38,9 +35,6 @@ public class CarteleraController {
         return resultado;
     }
 
-    /**
-     * Funciones que todavía se pueden comprar de una película, ordenadas por fecha.
-     */
     public ArrayList<Funcion> obtenerFunciones(Pelicula pelicula) {
         return facade.obtenerFuncionesDisponibles(pelicula.getId());
     }

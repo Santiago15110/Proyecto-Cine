@@ -2,12 +2,6 @@ package org.example.proyectocine.model;
 
 import java.util.ArrayList;
 
-/**
- * Clase central del sistema del cine.
- * Contiene las listas principales y se encarga de crear los objetos
- * (registrar, buscar, iniciar sesión). Usa el patrón Singleton para que
- * todas las pantallas compartan los mismos datos.
- */
 public class Cine {
 
     private static Cine instancia;
@@ -56,7 +50,6 @@ public class Cine {
         listUsuarios.add(cliente);
         return cliente;
     }
-
 
     /**
      * Registra un administrador nuevo en el sistema.
@@ -338,7 +331,6 @@ public class Cine {
         }
         return resultado;
     }
-
 
     /**
      * Verifica que el correo no esté registrado.

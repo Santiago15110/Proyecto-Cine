@@ -9,9 +9,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-/**
- * Panel principal del administrador: estadísticas básicas y accesos a la gestión del cine.
- */
 public class PanelAdminViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
@@ -46,6 +43,6 @@ public class PanelAdminViewController {
     @FXML
     private void onCerrarSesion() {
         panelController.cerrarSesion();
-        SceneManager.cambiarA(Vista.LOGIN);
+        SceneManager.cambiarA(Vista.BIENVENIDA);
     }
 }

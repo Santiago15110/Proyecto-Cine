@@ -1,9 +1,5 @@
 package org.example.proyectocine.model;
 
-/**
- * Se lanza cuando se intenta cancelar una función o una compra
- * que no admite cancelación en su estado actual.
- */
 public class CancelacionNoPermitidaException extends CinemaException {
 
     private static final long serialVersionUID = 1L;

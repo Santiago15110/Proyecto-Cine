@@ -11,29 +11,29 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefWidth="760.0" prefHeight="560.0" styleClass="raiz" stylesheets="@estilos.css"
+<VBox alignment="CENTER" prefWidth="820.0" prefHeight="600.0" styleClass="raiz" stylesheets="@estilos.css"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.proyectocine.viewController.RegistroUsuarioViewController">
     <padding>
         <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
     </padding>
 
-    <VBox spacing="14.0" styleClass="tarjeta" maxWidth="520.0">
-        <Label text="Crear cuenta" styleClass="titulo"/>
-        <Label text="Regístrate como cliente. Al crear tu cuenta recibes tu tarjeta virtual y empiezas a acumular puntos CinemaUQ."
-               wrapText="true"/>
+    <VBox spacing="14.0" styleClass="tarjeta" maxWidth="540.0">
+        <Label fx:id="lblTitulo" text="Crear cuenta de cliente" styleClass="titulo"/>
+        <Label fx:id="lblDescripcion" wrapText="true" minHeight="-Infinity"
+               text="Al crear tu cuenta recibes tu tarjeta virtual y empiezas a acumular puntos CinemaUQ."/>
 
         <GridPane hgap="10.0" vgap="10.0">
             <columnConstraints>
-                <ColumnConstraints minWidth="160.0"/>
+                <ColumnConstraints minWidth="170.0"/>
                 <ColumnConstraints hgrow="ALWAYS"/>
             </columnConstraints>
 
             <Label text="Nombre completo:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
             <TextField fx:id="txtNombre" promptText="Nombre y apellido" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Label text="Cédula:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="txtCedula" promptText="Solo números" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label fx:id="lblIdentificacion" text="Cédula:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtIdentificacion" promptText="Solo números" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
             <Label text="Correo:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
             <TextField fx:id="txtCorreo" promptText="correo@ejemplo.com" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
@@ -42,11 +42,13 @@
             <PasswordField fx:id="txtClave" promptText="Mínimo 4 caracteres" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
             <Label text="Confirmar contraseña:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-            <PasswordField fx:id="txtConfirmarClave" promptText="Repite la contraseña" GridPane.rowIndex="4" GridPane.columnIndex="1"
-                           onAction="#onRegistrar"/>
+            <PasswordField fx:id="txtConfirmarClave" promptText="Repite la contraseña" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label fx:id="lblAutorizacion" text="Código de autorización:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="txtAutorizacion" promptText="Lo entrega el cine a su personal" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
         </GridPane>
 
-        <Label fx:id="lblMensaje" wrapText="true"/>
+        <Label fx:id="lblMensaje" wrapText="true" minHeight="-Infinity"/>
 
         <Button text="Crear cuenta" defaultButton="true" onAction="#onRegistrar"
                 styleClass="boton-principal" maxWidth="Infinity"/>

@@ -17,52 +17,31 @@ public class ReporteController {
         this.cineFacade = new CineFacade();
     }
 
-    /**
-     * Procesa la creación de la estrategia de reporte utilizando la fachada y el tipo seleccionado.
-     */
     public ReporteStrategy generarReporte(String tipoReporteStr, LocalDate inicio, LocalDate fin) {
         TipoReporte tipo = convertirATipoReporte(tipoReporteStr);
         return cineFacade.crearReporte(tipo, inicio, fin);
     }
 
-    /**
-     * Obtiene el contenido en texto plano del reporte.
-     */
     public String obtenerTextoReporte(ReporteStrategy reporte) {
         return cineFacade.generarReporteTexto(reporte);
     }
 
-    /**
-     * Exporta el reporte actual a un archivo TXT.
-     */
     public void exportarTxt(ReporteStrategy reporte, String ruta) {
         cineFacade.exportarReporteTXT(reporte, ruta);
     }
 
-    /**
-     * Exporta el reporte actual a un archivo PDF.
-     */
     public void exportarPdf(ReporteStrategy reporte, String ruta) {
         cineFacade.exportarReportePDF(reporte, ruta);
     }
 
-    /**
-     * Genera el gráfico visual de barras.
-     */
     public BarChart<String, Number> construirBarChart(ReporteStrategy reporte) {
         return ReporteVisual.crearBarChart(reporte, "Categoría / Elemento", "Valor / Monto");
     }
 
-    /**
-     * Genera el gráfico visual de pastel.
-     */
     public PieChart construirPieChart(ReporteStrategy reporte) {
         return ReporteVisual.crearPieChart(reporte);
     }
 
-    /**
-     * Genera el gráfico visual de líneas.
-     */
     public LineChart<String, Number> construirLineChart(ReporteStrategy reporte) {
         return ReporteVisual.crearLineChart(reporte, "Periodo", "Valor");
     }

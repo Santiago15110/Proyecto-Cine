@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="28.0" prefWidth="820.0" prefHeight="520.0" styleClass="login-marca"
+      stylesheets="@estilos.css" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.BienvenidaViewController">
+    <padding>
+        <Insets top="40.0" right="40.0" bottom="40.0" left="40.0"/>
+    </padding>
+
+    <VBox alignment="CENTER" spacing="6.0">
+        <Label text="CinemaUQ" styleClass="login-logo"/>
+        <Label text="Bienvenido. ¿Cómo quieres ingresar?" styleClass="login-lema"/>
+    </VBox>
+
+    <HBox alignment="CENTER" spacing="24.0">
+        <VBox alignment="CENTER" spacing="12.0" styleClass="tarjeta, opcion-perfil" prefWidth="300.0">
+            <Label text="Soy cliente" styleClass="titulo"/>
+            <Label text="Compra entradas, elige tus asientos, paga con tu tarjeta virtual y acumula puntos."
+                   wrapText="true" styleClass="texto-centrado"/>
+            <Button text="Ingresar como cliente" onAction="#onCliente" styleClass="boton-principal"
+                    maxWidth="Infinity" defaultButton="true"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="12.0" styleClass="tarjeta, opcion-perfil" prefWidth="300.0">
+            <Label text="Soy administrador" styleClass="titulo"/>
+            <Label text="Gestiona películas, funciones, confitería, clientes y consulta los reportes del cine."
+                   wrapText="true" styleClass="texto-centrado"/>
+            <Button text="Ingresar como administrador" onAction="#onAdministrador" styleClass="boton-principal"
+                    maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <Label text="Universidad del Quindío · Programación II" styleClass="login-pie"/>
+</VBox>

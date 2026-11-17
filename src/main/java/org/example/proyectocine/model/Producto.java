@@ -2,10 +2,6 @@ package org.example.proyectocine.model;
 
 import java.util.Objects;
 
-/**
- * Producto suelto de la confitería (hoja del patrón Composite).
- * Ejemplos: crispetas, gaseosa, perro caliente.
- */
 public class Producto implements ItemConfiteria {
 
     private final String id;

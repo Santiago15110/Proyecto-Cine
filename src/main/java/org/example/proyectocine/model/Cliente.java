@@ -5,12 +5,9 @@ import java.util.ArrayList;
 
 public class Cliente extends Usuario implements Observador {
 
-
     private String cedula;
 
-
     private TarjetaVirtual theTarjeta;
-
 
     private AcumulacionPunto theAcumulacion;
     private final ArrayList<String> listNotificaciones = new ArrayList<>();
@@ -30,7 +27,6 @@ public class Cliente extends Usuario implements Observador {
         this.theAcumulacion = new AcumulacionPunto(this);
     }
 
-
     @Override
     public void actualizar(TipoEvento evento, Object dato){
         if(evento == TipoEvento.FUNCION_CANCELADA){
@@ -49,11 +45,9 @@ public class Cliente extends Usuario implements Observador {
         return cedula;
     }
 
-
     public TarjetaVirtual getTheTarjeta() {
         return theTarjeta;
     }
-
 
     public AcumulacionPunto getTheAcumulacion() {
         return theAcumulacion;

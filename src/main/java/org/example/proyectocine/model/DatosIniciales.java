@@ -8,19 +8,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Carga los datos iniciales para demostrar el funcionamiento de la aplicación
- * (requisito técnico del enunciado). Todo se crea por medio del {@link CineFacade},
- * así que se aplican las mismas reglas y validaciones que en la aplicación.
- *
- * <p>Usuarios de prueba:</p>
- * <ul>
- *     <li>Administrador: admin@cinemauq.com / admin123</li>
- *     <li>Cliente: ana@mail.com / 1234 (saldo, puntos de varias fechas, compras y una notificación)</li>
- *     <li>Cliente: luis@mail.com / 1234 (compró con promoción y redimió puntos)</li>
- *     <li>Cliente: sofia@mail.com / 1234 (tarjeta bloqueada)</li>
- * </ul>
- */
 public final class DatosIniciales {
 
     public static final String CORREO_ADMIN = "admin@cinemauq.com";
@@ -29,22 +16,17 @@ public final class DatosIniciales {
     private DatosIniciales() {
     }
 
-    /**
-     * Carga los datos solo si el cine está vacío.
-     */
     public static void cargar() {
         if (!Cine.getInstancia().getUsuarios().isEmpty()) {
             return;
         }
         CineFacade f = new CineFacade();
 
-        // ---------- Usuarios ----------
         f.registrarAdmin("Administrador CinemaUQ", CORREO_ADMIN, CLAVE_ADMIN, "AD-001");
         f.registrarCliente("Ana María López", "ana@mail.com", "1234", "1094000001");
         f.registrarCliente("Luis Gómez", "luis@mail.com", "1234", "1094000002");
         f.registrarCliente("Sofía Ramírez", "sofia@mail.com", "1234", "1094000003");
 
-        // ---------- Lo que gestiona el administrador ----------
         f.iniciarSesion(CORREO_ADMIN, CLAVE_ADMIN);
 
         f.agregarPelicula("P01", "Dune: Parte Dos", Genero.CIENCIA_FICCION, "+13", 166,
@@ -67,7 +49,6 @@ public final class DatosIniciales {
         f.deshabilitarAsiento("S1", "H12");
 
         LocalDate hoy = LocalDate.now();
-        // Funciones normales en los próximos días
         f.programarFuncion("F01", "P01", "S1", hoy.plusDays(1).atTime(18, 0), 15000);
         f.programarFuncion("F02", "P01", "S2", hoy.plusDays(2).atTime(20, 30), 22000);
         f.programarFuncion("F03", "P02", "S3", hoy.plusDays(1).atTime(15, 0), 12000);
@@ -76,7 +57,6 @@ public final class DatosIniciales {
         f.programarFuncion("F06", "P04", "S3", hoy.plusDays(1).atTime(21, 45), 15000);
         f.programarFuncion("F07", "P05", "S2", hoy.plusDays(4).atTime(20, 0), 22000);
         f.programarFuncion("F08", "P06", "S1", hoy.plusDays(3).atTime(16, 0), 15000);
-        // Funciones para demostrar la regla de cancelación: en unas 10 horas (80 %) y en 1 hora (no se permite)
         f.programarFuncion("F09", "P03", "S3", redondear(LocalDateTime.now().plusHours(10)), 15000);
         f.programarFuncion("F10", "P05", "S1", redondear(LocalDateTime.now().plusMinutes(70)), 15000);
 
@@ -98,7 +78,6 @@ public final class DatosIniciales {
         f.recargarTarjeta("1094000002", 60000);
         f.recargarTarjeta("1094000003", 40000);
 
-        // Puntos obtenidos en fechas anteriores (para mostrar vencimientos y el orden de redención)
         Cliente ana = f.buscarCliente("1094000001");
         ana.getTheAcumulacion().sumarPuntos(300, "Bienvenida", hoy.minusMonths(11));
         ana.getTheAcumulacion().sumarPuntos(500, "Aniversario CinemaUQ", hoy.minusMonths(2));
@@ -106,7 +85,6 @@ public final class DatosIniciales {
         Cliente luis = f.buscarCliente("1094000002");
         luis.getTheAcumulacion().sumarPuntos(150, "Bienvenida", hoy.minusMonths(5));
 
-        // ---------- Compras de los clientes ----------
         f.realizarCompra("1094000001", "F01", lista("D6", "D7"), productos("COMBO_PAREJA", 1), new ArrayList<>());
         f.comprarConfiteria("1094000001", productos("NACHOS", 1));
         f.realizarCompra("1094000001", "F08", lista("E5"), new LinkedHashMap<>(), new ArrayList<>());
@@ -119,9 +97,8 @@ public final class DatosIniciales {
 
         f.realizarCompra("1094000003", "F06", lista("C1"), productos("COMBO_PERSONAL", 1), new ArrayList<>());
 
-        // ---------- Acciones del administrador después de las compras ----------
         f.bloquearTarjeta("1094000003");
-        f.cancelarFuncion("F08");   // Ana recibe la notificación y el reembolso (Observer)
+        f.cancelarFuncion("F08");
 
         f.cerrarSesion();
     }

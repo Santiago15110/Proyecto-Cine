@@ -22,10 +22,8 @@
         <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
     </padding>
 
-    <!-- Título principal igual que en las demás vistas -->
     <Label text="Reportes operativos" styleClass="titulo"/>
 
-    <!-- Tarjeta superior: Filtros de fecha -->
     <VBox spacing="10.0" styleClass="tarjeta">
         <Label text="Periodo de consulta" styleClass="subtitulo"/>
         <HBox spacing="15.0" alignment="CENTER_LEFT">
@@ -39,10 +37,8 @@
         </HBox>
     </VBox>
 
-    <!-- Contenedor dividido: Izquierda (7 reportes) y Derecha (3 formatos de salida) -->
     <HBox spacing="15.0" VBox.vgrow="ALWAYS">
 
-        <!-- PANEL IZQUIERDO: Selección del tipo de reporte -->
         <VBox spacing="10.0" prefWidth="250.0" styleClass="tarjeta">
             <Label text="1. Tipo de reporte" styleClass="subtitulo"/>
             <ListView fx:id="lvTiposReporte" VBox.vgrow="ALWAYS"/>
@@ -50,12 +46,10 @@
                     onAction="#onGenerarReporte" styleClass="boton-principal"/>
         </VBox>
 
-        <!-- PANEL DERECHO: Opciones de visualización y exportación -->
         <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="tarjeta">
             <HBox spacing="15.0" alignment="CENTER_LEFT">
                 <Label text="2. Formato:" styleClass="subtitulo"/>
 
-                <!-- Opciones de cómo quiere ver el reporte -->
                 <RadioButton fx:id="rbTexto" text="Texto / Tabla" selected="true" onAction="#onCambiarVista">
                     <toggleGroup>
                         <ToggleGroup fx:id="tgFormato"/>
@@ -65,19 +59,16 @@
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <!-- Selector de tipo de gráfico (se activa cuando se elige Gráfico visual) -->
                 <ComboBox fx:id="cmbTipoGrafico" promptText="Tipo de gráfico" prefWidth="145.0"
                           disable="true" onAction="#onCambiarTipoGrafico"/>
             </HBox>
 
-            <!-- Área central dinámica donde se muestra el texto o el gráfico -->
             <StackPane VBox.vgrow="ALWAYS" prefHeight="280.0">
                 <TextArea fx:id="txtResultadoTexto" editable="false" wrapText="false"
                           style="-fx-font-family: 'Courier New', monospace; -fx-font-size: 12px;"/>
                 <StackPane fx:id="panelGrafico" visible="false"/>
             </StackPane>
 
-            <!-- Botones de exportación directa -->
             <HBox spacing="10.0" alignment="CENTER_RIGHT">
                 <Label fx:id="lblMensaje" wrapText="true" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button text="Exportar a TXT" onAction="#onExportarTxt"/>
@@ -87,7 +78,6 @@
 
     </HBox>
 
-    <!-- Botón inferior de navegación igual que en Registro y Tarjeta -->
     <HBox>
         <Button text="Volver" cancelButton="true" onAction="#onVolver"/>
     </HBox>

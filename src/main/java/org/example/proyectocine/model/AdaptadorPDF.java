@@ -8,11 +8,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Convierte el texto de un reporte en un documento PDF sin librerías externas.
- * Escribe el PDF a mano (formato PDF 1.4) con letra Courier para que las columnas
- * del reporte queden alineadas, y crea varias páginas si el reporte es largo.
- */
 public class AdaptadorPDF {
 
     private static final Charset WINDOWS_1252 = Charset.forName("windows-1252");
@@ -49,7 +44,6 @@ public class AdaptadorPDF {
         List<List<String>> paginas = dividirEnPaginas(texto);
         int cantidadPaginas = paginas.size();
 
-        // Objetos: 1 catálogo, 2 árbol de páginas, 3 fuente, luego (página, contenido) por cada página
         List<byte[]> objetos = new ArrayList<>();
         objetos.add(ascii("<< /Type /Catalog /Pages 2 0 R >>"));
 

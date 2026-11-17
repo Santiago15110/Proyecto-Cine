@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class ReporteEntradasFuncion extends ReporteStrategy {
 
     private final List<Funcion> funcionesTotales;
@@ -73,7 +72,6 @@ public class ReporteEntradasFuncion extends ReporteStrategy {
             LocalDate fechaCompra = compra.getFecha().toLocalDate();
             boolean dentroDeRango = (fechaInicio == null || !fechaCompra.isBefore(fechaInicio))
                     && (fechaFin == null || !fechaCompra.isAfter(fechaFin));
-            // Solo cuentan las compras pagadas (no las canceladas) dentro del periodo
             if (dentroDeRango && compra.getEstado() instanceof EstadoPagada
                     && compra.getFuncion() != null && !compra.getEntradas().isEmpty()) {
                 String idFuncion = compra.getFuncion().getId();

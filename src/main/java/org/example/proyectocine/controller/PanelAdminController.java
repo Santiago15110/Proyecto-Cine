@@ -8,11 +8,6 @@ import org.example.proyectocine.model.EstadoPagada;
 import org.example.proyectocine.model.Funcion;
 import org.example.proyectocine.model.Usuario;
 
-/**
- * Intermediario entre el panel principal del administrador y el modelo.
- * Calcula las estadísticas básicas que se muestran al entrar.
- * No usa nada de JavaFX: trabaja con {@link CineFacade}.
- */
 public class PanelAdminController {
 
     private final CineFacade facade;

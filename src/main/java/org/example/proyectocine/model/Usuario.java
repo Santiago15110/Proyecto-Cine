@@ -1,6 +1,5 @@
 package org.example.proyectocine.model;
 
-
 public abstract class Usuario {
 
     protected String nombre;

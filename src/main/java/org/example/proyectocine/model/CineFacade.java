@@ -11,8 +11,9 @@ import java.util.UUID;
 
 public class CineFacade {
 
-    /** Regla de puntos del grupo: 1 punto CinemaUQ por cada $1.000 pagados con saldo. */
     private static final double PESOS_POR_PUNTO = 1000;
+
+    public static final String CODIGO_AUTORIZACION_ADMIN = "CINEMAUQ-2026";
 
     private final Cine cine;
     private final IPasarelaPago pasarela;
@@ -33,19 +34,33 @@ public class CineFacade {
         this.politicaReembolso = new PoliticaReembolso();
     }
 
-    // ===================== USUARIOS Y SESIÓN =====================
-
     public Cliente registrarCliente(String nombre, String correo, String clave, String cedula) {
         return cine.registrarCliente(nombre, correo, clave, cedula);
     }
 
-    /**
-     * Registra un administrador. El primer administrador se puede crear libremente;
-     * después, solo otro administrador puede crear administradores.
-     */
     public Admin registrarAdmin(String nombre, String correo, String clave, String codigo) {
         if (existeAdministrador()) {
             validarAdministrador("registrar administradores");
+        }
+        return cine.registrarAdmin(nombre, correo, clave, codigo);
+    }
+
+    /**
+     * Registro público de un administrador desde la pantalla de registro. Como cualquiera puede
+     * abrir esa pantalla, se exige el código de autorización que entrega el cine a su personal.
+     *
+     * @param nombre             nombre completo del administrador
+     * @param correo             correo del administrador
+     * @param clave              contraseña del administrador
+     * @param codigo             código de empleado del administrador
+     * @param codigoAutorizacion código de autorización del cine
+     * @return el administrador registrado
+     * @throws AccesoDenegadoException si el código de autorización no es correcto
+     */
+    public Admin registrarAdminConAutorizacion(String nombre, String correo, String clave, String codigo,
+                                               String codigoAutorizacion) {
+        if (!CODIGO_AUTORIZACION_ADMIN.equals(codigoAutorizacion)) {
+            throw new AccesoDenegadoException("El código de autorización no es válido");
         }
         return cine.registrarAdmin(nombre, correo, clave, codigo);
     }
@@ -99,8 +114,6 @@ public class CineFacade {
         return cine.getClientes();
     }
 
-    // ===================== TARJETA =====================
-
     /**
      * Recarga la tarjeta virtual de un cliente. Solo el administrador puede hacerlo:
      * el pago se procesa con la pasarela externa (Adapter) y, si se aprueba, se suma al saldo.
@@ -151,8 +164,6 @@ public class CineFacade {
         return movimientos;
     }
 
-    // ===================== PUNTOS =====================
-
     public int consultarPuntos(String cedula) {
         return buscarCliente(cedula).getTheAcumulacion().getPuntos();
     }
@@ -160,8 +171,6 @@ public class CineFacade {
     public ArrayList<RegistroPuntos> obtenerHistorialPuntos(String cedula) {
         return buscarCliente(cedula).getTheAcumulacion().getListRegistros();
     }
-
-    // ===================== CARTELERA (ADMIN) =====================
 
     public Pelicula agregarPelicula(String id, String titulo, Genero genero, String clasificacion,
                                     int duracionMin, String descripcion, String rutaPoster) {
@@ -236,17 +245,13 @@ public class CineFacade {
         if (funcion.isCancelada()) {
             throw new CancelacionNoPermitidaException("La función " + idFuncion + " ya está cancelada");
         }
-        // Primero se devuelve el dinero (o los puntos) de cada compra pagada...
         for (Compra compra : cine.comprasDeFuncion(funcion)) {
             if (compra.getEstado() instanceof EstadoPagada) {
                 cancelarYReembolsar(compra, 100);
             }
         }
-        // ...y después se cancela la función, que avisa a los clientes suscritos (Observer)
         funcion.cancelar();
     }
-
-    // ===================== COMPRAS =====================
 
     public Compra comprarEntradas(String cedula, String idFuncion, ArrayList<String> codigosAsientos) {
         return comprarEntradas(cedula, idFuncion, codigosAsientos, new ArrayList<>());
@@ -285,14 +290,10 @@ public class CineFacade {
                                  Map<String, Integer> productos, ArrayList<Promocion> promociones) {
         Cliente cliente = buscarCliente(cedula);
 
-        // 1. Armar la compra con el Builder (valida que los asientos estén libres y no se repitan)
         Compra compra = armarCompra(cliente, idFuncion, codigosAsientos, productos, promociones);
 
-        // 2. Confirmar: el estado Pendiente reserva los asientos y pasa la compra a Pagada (State)
         compra.confirmar();
 
-        // 3. Cobrar (la tarjeta verifica que esté activa y tenga saldo).
-        //    Si falla, se cancela la compra para liberar los asientos
         if (compra.getTotal() > 0) {
             try {
                 cliente.getTheTarjeta().descontar(compra.getTotal(), "Compra " + compra.getId());
@@ -302,7 +303,6 @@ public class CineFacade {
             }
         }
 
-        // 4. Puntos (quedan ligados a la compra), suscripción a la función (Observer) y guardar
         int puntos = calcularPuntos(compra.getTotal());
         if (puntos > 0) {
             cliente.getTheAcumulacion().sumarPuntos(puntos, compra.getId());
@@ -395,14 +395,12 @@ public class CineFacade {
     public void cancelarCompra(String idCompra) {
         Compra compra = buscarCompra(idCompra);
         if (!(compra.getEstado() instanceof EstadoPagada)) {
-            // El estado decide: Pendiente pasa a Cancelada, Cancelada lanza la excepción
             compra.cancelar();
             return;
         }
         double porcentaje = politicaReembolso.porcentajeReembolso(compra.getFuncion(), LocalDateTime.now());
         cancelarYReembolsar(compra, porcentaje);
 
-        // Si el cliente ya no tiene entradas para esa función, deja de recibir sus avisos
         Funcion funcion = compra.getFuncion();
         if (funcion != null && !tieneComprasPagadas(compra.getCliente(), funcion)) {
             funcion.eliminarObservador(compra.getCliente());
@@ -416,8 +414,6 @@ public class CineFacade {
     public ArrayList<String> obtenerNotificaciones(String cedula) {
         return new ArrayList<>(buscarCliente(cedula).getListNotificaciones());
     }
-
-    // ===================== CONFITERÍA (COMPOSITE) =====================
 
     public Producto crearProducto(String id, String nombre, double precio, int costoPuntos) {
         validarAdministrador("gestionar la confitería");
@@ -453,8 +449,6 @@ public class CineFacade {
         return new ArrayList<>(cine.getConfiteria());
     }
 
-    // ===================== PROMOCIONES (DECORATOR) =====================
-
     public Promocion crearPromocion(String id, String nombre, double porcentaje,
                                     LocalDate fechaInicio, LocalDate fechaFin) {
         validarAdministrador("gestionar promociones");
@@ -486,8 +480,6 @@ public class CineFacade {
         }
         return vigentes;
     }
-
-    // ===================== CONSULTAS =====================
 
     public ArrayList<Pelicula> obtenerPeliculasEnCartelera() {
         ArrayList<Pelicula> enCartelera = new ArrayList<>();
@@ -549,8 +541,6 @@ public class CineFacade {
         }
         return disponibles;
     }
-
-    // ===================== AUXILIARES =====================
 
     private Compra armarCompra(Cliente cliente, String idFuncion, ArrayList<String> codigosAsientos,
                                Map<String, Integer> productos, ArrayList<Promocion> promociones) {
@@ -619,14 +609,9 @@ public class CineFacade {
         return prefijo + "-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    /**
-     * Cancela una compra pagada y devuelve el porcentaje indicado a la tarjeta (o los puntos,
-     * si se pagó con puntos). También anula los puntos que había dado la compra.
-     */
     private void cancelarYReembolsar(Compra compra, double porcentaje) {
-        compra.cancelar();   // EstadoPagada libera los asientos y pasa a Cancelada
+        compra.cancelar();
         AcumulacionPunto acumulacion = compra.getCliente().getTheAcumulacion();
-        // Primero se anulan los puntos que había dado la compra (antes de devolver puntos con la misma referencia)
         acumulacion.anularPuntosDe(compra.getId());
         String etiqueta = porcentaje == 100 ? "" : " (" + (int) porcentaje + " %)";
         if (compra.isPagadaConPuntos()) {
@@ -727,8 +712,6 @@ public class CineFacade {
         return funcion;
     }
 
-    // ===================== REPORTES (FACTORY METHOD + STRATEGY) =====================
-
     /**
      * Crea el reporte que elija el administrador. {@link TipoReporte} (Factory Method) decide
      * qué estrategia concreta construir; el Facade no conoce las clases de cada reporte.
@@ -774,9 +757,6 @@ public class CineFacade {
         return crearReporte(TipoReporte.PUNTOS, inicio, fin);
     }
 
-    /**
-     * Genera el contenido en texto plano de cualquier estrategia de reporte seleccionada.
-     */
     public String generarReporteTexto(ReporteStrategy estrategia) {
         if (estrategia == null) {
             throw new IllegalArgumentException("La estrategia de reporte no puede ser nula.");
@@ -784,9 +764,6 @@ public class CineFacade {
         return estrategia.generarContenidoTexto();
     }
 
-    /**
-     * Exporta el reporte actual a un archivo de texto (.txt).
-     */
     public void exportarReporteTXT(ReporteStrategy estrategia, String ruta) {
         try {
             ExportadorTXT.exportar(estrategia, ruta);
@@ -795,9 +772,6 @@ public class CineFacade {
         }
     }
 
-    /**
-     * Exporta el reporte actual a un documento PDF.
-     */
     public void exportarReportePDF(ReporteStrategy estrategia, String ruta) {
         AdaptadorPDF.exportarPDF(estrategia, ruta);
     }

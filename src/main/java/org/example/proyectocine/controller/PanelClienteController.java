@@ -7,10 +7,6 @@ import org.example.proyectocine.model.Usuario;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * Intermediario entre el panel principal del cliente y el modelo.
- * No usa nada de JavaFX: trabaja con {@link CineFacade}.
- */
 public class PanelClienteController {
 
     private final CineFacade facade;

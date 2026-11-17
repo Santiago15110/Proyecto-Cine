@@ -1,15 +1,11 @@
 package org.example.proyectocine.model;
 
-
 import javafx.scene.chart.*;
 
 import java.util.Map;
 
 public class ReporteVisual {
 
-    /**
-     * Construye un diagrama de barras.
-     */
     public static BarChart<String, Number> crearBarChart(ReporteStrategy reporte, String etiquetaEjeX, String etiquetaEjeY) {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
@@ -31,9 +27,6 @@ public class ReporteVisual {
         return barChart;
     }
 
-    /**
-     * Construye un diagrama de pastel.
-     */
     public static PieChart crearPieChart(ReporteStrategy reporte) {
         PieChart pieChart = new PieChart();
         pieChart.setTitle(reporte.getTitulo());
@@ -46,9 +39,6 @@ public class ReporteVisual {
         return pieChart;
     }
 
-    /**
-     * Construye un gráfico de líneas.
-     */
     public static LineChart<String, Number> crearLineChart(ReporteStrategy reporte, String ejeX, String ejeY) {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();

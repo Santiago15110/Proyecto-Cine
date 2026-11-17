@@ -15,7 +15,6 @@
         <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
     </padding>
 
-    <!-- Encabezado -->
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <VBox spacing="2.0">
             <Label text="Panel de administración" styleClass="titulo"/>
@@ -25,7 +24,6 @@
         <Button text="Cerrar sesión" onAction="#onCerrarSesion"/>
     </HBox>
 
-    <!-- Estadísticas básicas -->
     <HBox spacing="15.0">
         <VBox spacing="4.0" styleClass="tarjeta" HBox.hgrow="ALWAYS">
             <Label text="Ventas" styleClass="subtitulo"/>
@@ -44,7 +42,6 @@
         </VBox>
     </HBox>
 
-    <!-- Opciones -->
     <Label text="Gestión" styleClass="subtitulo"/>
     <TilePane hgap="12.0" vgap="12.0" prefColumns="3" prefTileWidth="245.0">
         <Button text="Reportes y estadísticas" onAction="#onReportes" styleClass="boton-menu" maxWidth="Infinity"/>

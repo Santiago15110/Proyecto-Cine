@@ -2,10 +2,6 @@ package org.example.proyectocine.model;
 
 import java.time.LocalDate;
 
-/**
- * Una acumulación de puntos con su propia fecha de obtención y de vencimiento (un año después).
- * Ejemplo: 300 puntos obtenidos el 10/09/2026 que vencen el 10/09/2027.
- */
 public class RegistroPuntos {
 
     private final int puntosObtenidos;

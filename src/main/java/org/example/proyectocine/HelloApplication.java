@@ -11,7 +11,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) {
         DatosIniciales.cargar();
         SceneManager.iniciar(stage);
-        SceneManager.cambiarA(Vista.LOGIN);
+        SceneManager.cambiarA(Vista.BIENVENIDA);
         stage.show();
     }
 }
