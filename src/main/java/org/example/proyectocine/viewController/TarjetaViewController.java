@@ -5,21 +5,25 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.example.proyectocine.controller.TarjetaController;
 import org.example.proyectocine.model.AcumulacionPunto;
-import org.example.proyectocine.model.CinemaException;
 import org.example.proyectocine.model.Cliente;
 import org.example.proyectocine.model.MovimientoSaldo;
+import org.example.proyectocine.model.RegistroPuntos;
 import org.example.proyectocine.model.TarjetaVirtual;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-
+/**
+ * Pantalla "Mi tarjeta": el cliente que inició sesión consulta su saldo, el estado de su tarjeta,
+ * sus movimientos y sus puntos con sus fechas de vencimiento. No permite recargar
+ * (según el enunciado, solo el administrador recarga).
+ */
 public class TarjetaViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
@@ -27,18 +31,16 @@ public class TarjetaViewController {
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    @FXML private TextField txtCedula;
-    @FXML private Label lblBusqueda;
+    @FXML private Label lblSinSesion;
     @FXML private VBox contenido;
 
+    @FXML private Label lblEstado;
     @FXML private Label lblNumero;
     @FXML private Label lblTitular;
     @FXML private Label lblSaldo;
     @FXML private Label lblPuntos;
     @FXML private Label lblVencimiento;
-
-    @FXML private TextField txtMonto;
-    @FXML private Label lblMensaje;
+    @FXML private Label lblAviso;
 
     @FXML private TableView<MovimientoSaldo> tblMovimientos;
     @FXML private TableColumn<MovimientoSaldo, String> colFecha;
@@ -48,9 +50,17 @@ public class TarjetaViewController {
     @FXML private TableColumn<MovimientoSaldo, String> colSaldo;
     @FXML private TableColumn<MovimientoSaldo, String> colDescripcion;
 
+    @FXML private TableView<RegistroPuntos> tblPuntos;
+    @FXML private TableColumn<RegistroPuntos, String> colPtsObtenidos;
+    @FXML private TableColumn<RegistroPuntos, String> colPtsFecha;
+    @FXML private TableColumn<RegistroPuntos, String> colPtsVence;
+    @FXML private TableColumn<RegistroPuntos, String> colPtsDisponibles;
+    @FXML private TableColumn<RegistroPuntos, String> colPtsEstado;
+    @FXML private TableColumn<RegistroPuntos, String> colPtsOrigen;
+
     private final TarjetaController tarjetaController = new TarjetaController();
 
-    /** Cliente cuya tarjeta se está mostrando. */
+    /** Cliente cuya tarjeta se está mostrando (el de la sesión). */
     private Cliente cliente;
 
     @FXML
@@ -62,62 +72,40 @@ public class TarjetaViewController {
         colMonto.setCellValueFactory(c -> new SimpleStringProperty(FORMATO_PESOS.format(c.getValue().monto())));
         colSaldo.setCellValueFactory(c -> new SimpleStringProperty(FORMATO_PESOS.format(c.getValue().saldoResultante())));
         colDescripcion.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().descripcion()));
+
+        colPtsObtenidos.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getPuntosObtenidos())));
+        colPtsFecha.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getFechaObtencion().format(FORMATO_FECHA)));
+        colPtsVence.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getFechaVencimiento().format(FORMATO_FECHA)));
+        colPtsDisponibles.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getPuntosDisponibles())));
+        colPtsEstado.setCellValueFactory(c -> new SimpleStringProperty(estadoPuntos(c.getValue())));
+        colPtsOrigen.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getReferencia() == null || c.getValue().getReferencia().isBlank()
+                        ? "-" : c.getValue().getReferencia()));
+
+        // Al abrir la pantalla se muestra la tarjeta de quien inició sesión
+        mostrarCliente(tarjetaController.obtenerClienteEnSesion());
     }
 
     /**
-     * Muestra la tarjeta de un cliente. Cuando exista el login, la pantalla anterior
-     * llamará a este método con el cliente que inició sesión.
+     * Muestra la tarjeta de un cliente. Si es null, muestra el aviso de iniciar sesión.
      *
      * @param cliente cliente a mostrar
      */
     public void mostrarCliente(Cliente cliente) {
         this.cliente = cliente;
-        contenido.setDisable(false);
-        lblMensaje.setText("");
-        actualizarDatos();
-    }
-
-    @FXML
-    private void onConsultar() {
-        String cedula = txtCedula.getText().trim();
-        if (cedula.isEmpty()) {
-            lblBusqueda.setText("Ingresa la cédula del cliente.");
-            return;
-        }
-        try {
-            mostrarCliente(tarjetaController.buscarCliente(cedula));
-            lblBusqueda.setText("");
-        } catch (CinemaException | IllegalArgumentException e) {
-            cliente = null;
-            contenido.setDisable(true);
-            lblBusqueda.setText(e.getMessage());
-        }
-    }
-
-    @FXML
-    private void onRecargar() {
-        if (cliente == null) {
-            return;
-        }
-        String textoMonto = txtMonto.getText().trim().replace(".", "");
-        if (!textoMonto.matches("\\d+")) {
-            mostrarError("Escribe un monto válido, solo números.");
-            return;
-        }
-        try {
-            double monto = Double.parseDouble(textoMonto);
-            tarjetaController.recargar(cliente, monto);
-            mostrarExito("Recarga de " + FORMATO_PESOS.format(monto) + " realizada correctamente.");
-            txtMonto.clear();
+        boolean haySesion = cliente != null;
+        lblSinSesion.setVisible(!haySesion);
+        lblSinSesion.setManaged(!haySesion);
+        contenido.setVisible(haySesion);
+        contenido.setManaged(haySesion);
+        if (haySesion) {
             actualizarDatos();
-        } catch (CinemaException | IllegalArgumentException e) {
-            mostrarError(e.getMessage());
         }
     }
 
     @FXML
     private void onVolver() {
-        SceneManager.cambiarA(Vista.INICIO);
+        Navegacion.irAlPanel();
     }
 
     private void actualizarDatos() {
@@ -127,23 +115,35 @@ public class TarjetaViewController {
         lblNumero.setText("N° " + tarjeta.getNumero());
         lblTitular.setText(cliente.getNombre().toUpperCase());
         lblSaldo.setText(FORMATO_PESOS.format(tarjeta.getSaldo()));
+
+        lblEstado.getStyleClass().removeAll("estado-activa", "estado-bloqueada");
+        if (tarjeta.isActiva()) {
+            lblEstado.setText("ACTIVA");
+            lblEstado.getStyleClass().add("estado-activa");
+            lblAviso.setText("¿Necesitas más saldo? Las recargas las realiza el administrador del cine.");
+        } else {
+            lblEstado.setText("BLOQUEADA");
+            lblEstado.getStyleClass().add("estado-bloqueada");
+            lblAviso.setText("Tu tarjeta está bloqueada: no puedes pagar compras con saldo. "
+                    + "Comunícate con el administrador del cine.");
+        }
+
         lblPuntos.setText(String.valueOf(puntos.getPuntos()));
         lblVencimiento.setText(puntos.getFechaVencimiento() == null
                 ? "Sin puntos por vencer"
                 : "Los próximos vencen el " + puntos.getFechaVencimiento().format(FORMATO_FECHA));
 
         tblMovimientos.getItems().setAll(tarjetaController.obtenerMovimientosRecientes(cliente));
+        tblPuntos.getItems().setAll(tarjetaController.obtenerHistorialPuntos(cliente));
     }
 
-    private void mostrarError(String mensaje) {
-        lblMensaje.getStyleClass().removeAll("mensaje-error", "mensaje-exito");
-        lblMensaje.getStyleClass().add("mensaje-error");
-        lblMensaje.setText(mensaje);
-    }
-
-    private void mostrarExito(String mensaje) {
-        lblMensaje.getStyleClass().removeAll("mensaje-error", "mensaje-exito");
-        lblMensaje.getStyleClass().add("mensaje-exito");
-        lblMensaje.setText(mensaje);
+    private String estadoPuntos(RegistroPuntos registro) {
+        if (registro.estaVencido(LocalDate.now())) {
+            return registro.getPuntosDisponibles() > 0 ? "Vencidos" : "Usados";
+        }
+        if (registro.getPuntosDisponibles() == 0) {
+            return "Usados";
+        }
+        return registro.getPuntosDisponibles() < registro.getPuntosObtenidos() ? "Parcial" : "Vigentes";
     }
 }

@@ -4,13 +4,17 @@ import org.example.proyectocine.model.AcumulacionPunto;
 import org.example.proyectocine.model.CineFacade;
 import org.example.proyectocine.model.Cliente;
 import org.example.proyectocine.model.MovimientoSaldo;
+import org.example.proyectocine.model.RegistroPuntos;
 import org.example.proyectocine.model.TarjetaVirtual;
+import org.example.proyectocine.model.Usuario;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
- * Intermediario entre la pantalla de la tarjeta virtual y el modelo.
- * No usa nada de JavaFX: recibe datos simples y trabaja con {@link CineFacade}.
+ * Intermediario entre la pantalla "Mi tarjeta" y el modelo.
+ * Es solo de consulta: según el enunciado, únicamente el administrador puede recargar.
+ * No usa nada de JavaFX: trabaja con {@link CineFacade}.
  */
 public class TarjetaController {
 
@@ -21,25 +25,13 @@ public class TarjetaController {
     }
 
     /**
-     * Busca el cliente dueño de la tarjeta.
+     * Devuelve el cliente que tiene la sesión abierta.
      *
-     * @param cedula cédula del cliente
-     * @return el cliente encontrado
-     * @throws org.example.proyectocine.model.UsuarioNoEncontradoException si no existe un cliente con esa cédula
+     * @return el cliente, o null si no hay sesión o quien la tiene no es cliente
      */
-    public Cliente buscarCliente(String cedula) {
-        return facade.buscarCliente(cedula);
-    }
-
-    /**
-     * Recarga la tarjeta virtual de un cliente. La tarjeta registra el movimiento.
-     *
-     * @param cliente cliente dueño de la tarjeta
-     * @param monto   valor a recargar
-     * @throws IllegalArgumentException si el monto es menor o igual a 0
-     */
-    public void recargar(Cliente cliente, double monto) {
-        facade.recargarTarjeta(cliente.getCedula(), monto);
+    public Cliente obtenerClienteEnSesion() {
+        Usuario usuario = facade.obtenerUsuarioActual();
+        return usuario instanceof Cliente ? (Cliente) usuario : null;
     }
 
     public TarjetaVirtual obtenerTarjeta(Cliente cliente) {
@@ -58,5 +50,17 @@ public class TarjetaController {
      */
     public ArrayList<MovimientoSaldo> obtenerMovimientosRecientes(Cliente cliente) {
         return facade.obtenerMovimientos(cliente.getCedula());
+    }
+
+    /**
+     * Devuelve las acumulaciones de puntos, de la más reciente a la más antigua.
+     *
+     * @param cliente cliente dueño de los puntos
+     * @return copia de las acumulaciones
+     */
+    public ArrayList<RegistroPuntos> obtenerHistorialPuntos(Cliente cliente) {
+        ArrayList<RegistroPuntos> registros = facade.obtenerHistorialPuntos(cliente.getCedula());
+        registros.sort(Comparator.comparing(RegistroPuntos::getFechaObtencion).reversed());
+        return registros;
     }
 }

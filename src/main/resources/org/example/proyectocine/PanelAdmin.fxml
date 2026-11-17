@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="18.0" prefWidth="820.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.PanelAdminViewController">
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
+
+    <!-- Encabezado -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox spacing="2.0">
+            <Label text="Panel de administración" styleClass="titulo"/>
+            <Label fx:id="lblSaludo" text="Administrador"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Cerrar sesión" onAction="#onCerrarSesion"/>
+    </HBox>
+
+    <!-- Estadísticas básicas -->
+    <HBox spacing="15.0">
+        <VBox spacing="4.0" styleClass="tarjeta" HBox.hgrow="ALWAYS">
+            <Label text="Ventas" styleClass="subtitulo"/>
+            <Label fx:id="lblVentas" text="\$ 0" styleClass="dato-grande, texto-acento"/>
+            <Label text="Compras pagadas con saldo"/>
+        </VBox>
+        <VBox spacing="4.0" styleClass="tarjeta" HBox.hgrow="ALWAYS">
+            <Label text="Clientes" styleClass="subtitulo"/>
+            <Label fx:id="lblClientes" text="0" styleClass="dato-grande, texto-acento"/>
+            <Label text="Registrados"/>
+        </VBox>
+        <VBox spacing="4.0" styleClass="tarjeta" HBox.hgrow="ALWAYS">
+            <Label text="Cartelera" styleClass="subtitulo"/>
+            <Label fx:id="lblPeliculas" text="0" styleClass="dato-grande, texto-acento"/>
+            <Label fx:id="lblFunciones" text="0 funciones programadas"/>
+        </VBox>
+    </HBox>
+
+    <!-- Opciones -->
+    <Label text="Gestión" styleClass="subtitulo"/>
+    <TilePane hgap="12.0" vgap="12.0" prefColumns="3" prefTileWidth="245.0">
+        <Button text="Reportes y estadísticas" onAction="#onReportes" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Películas (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Salas (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Funciones (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Confitería (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Promociones (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Clientes (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Compras (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+    </TilePane>
+</VBox>

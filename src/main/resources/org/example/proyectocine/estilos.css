@@ -38,6 +38,24 @@
     -fx-text-fill: white;
 }
 
+/* Etiqueta de estado de la tarjeta */
+.estado-activa, .estado-bloqueada {
+    -fx-background-radius: 10;
+    -fx-padding: 2 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.tarjeta-virtual .estado-activa {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-text-fill: white;
+}
+
+.tarjeta-virtual .estado-bloqueada {
+    -fx-background-color: #212121;
+    -fx-text-fill: #ffcdd2;
+}
+
 .dato-grande {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
@@ -55,6 +73,34 @@
 
 .texto-acento {
     -fx-text-fill: #b71c1c;
+}
+
+/* ===== Login ===== */
+
+.login-marca {
+    -fx-background-color: linear-gradient(to bottom right, #8e1515, #e53935);
+}
+
+.login-logo {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.login-lema {
+    -fx-font-size: 15px;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+}
+
+.login-pie {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.enlace {
+    -fx-text-fill: #b71c1c;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
 }
 
 /* ===== Campos de texto ===== */
@@ -83,6 +129,21 @@
 
 .button:hover {
     -fx-background-color: #d0d0d0;
+}
+
+/* Botones grandes de los paneles */
+.boton-menu {
+    -fx-background-color: white;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-padding: 18 20;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.10), 8, 0, 0, 2);
+}
+
+.boton-menu:hover {
+    -fx-background-color: #fdecea;
 }
 
 /* Botón principal (Registrar) */

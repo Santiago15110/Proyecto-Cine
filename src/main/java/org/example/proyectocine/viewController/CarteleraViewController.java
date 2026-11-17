@@ -238,7 +238,7 @@ public class CarteleraViewController {
 
     @FXML
     private void onVolver() {
-        SceneManager.cambiarA(Vista.INICIO);
+        Navegacion.irAlPanel();
     }
 
     // ===================== AUXILIARES =====================

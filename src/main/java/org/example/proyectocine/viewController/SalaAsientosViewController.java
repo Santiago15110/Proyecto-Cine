@@ -237,10 +237,8 @@ public class SalaAsientosViewController {
             mostrarMensaje("Elige al menos un asiento para continuar", true);
             return;
         }
-        // Pendiente: aquí se abrirá la pantalla de confitería y descuentos, pasándole
-        // la función y getAsientosSeleccionados()
-        mostrarMensaje("Asientos elegidos: " + seleccionados.size()
-                + ". El paso de confitería y descuentos todavía no está disponible.", false);
+        ConfiteriaPagoViewController pago = SceneManager.cambiarA(Vista.PAGO);
+        pago.iniciar(funcion, getAsientosSeleccionados());
     }
 
     @FXML

@@ -345,6 +345,23 @@ public class CineFacade {
     }
 
     /**
+     * Calcula el total de una compra sin realizarla (no reserva asientos ni cobra),
+     * para mostrarlo en pantalla antes de pagar. Aplica las mismas reglas que la compra real.
+     *
+     * @param cedula          cédula del cliente
+     * @param idFuncion       id de la función, o null si solo hay confitería
+     * @param codigosAsientos asientos elegidos
+     * @param productos       id del producto o combo → cantidad
+     * @param promociones     promociones a aplicar
+     * @return total a pagar con saldo
+     */
+    public double cotizarCompra(String cedula, String idFuncion, ArrayList<String> codigosAsientos,
+                                Map<String, Integer> productos, ArrayList<Promocion> promociones) {
+        Cliente cliente = buscarCliente(cedula);
+        return armarCompra(cliente, idFuncion, codigosAsientos, productos, promociones).getTotal();
+    }
+
+    /**
      * Calcula cuántos puntos cuesta una selección, para mostrarlo antes de redimir.
      *
      * @param idFuncion       id de la función, o null

@@ -165,7 +165,7 @@ public class ReportesViewController {
 
     @FXML
     public void onVolver() {
-        SceneManager.cambiarA(Vista.INICIO);
+        Navegacion.irAlPanel();
     }
 
 }
