@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="16.0" prefWidth="900.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.AdminSalasViewController">
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox spacing="2.0">
+            <Label text="Gestión de salas y asientos" styleClass="titulo"/>
+            <Label text="Crea nuevas salas de proyección y habilita o deshabilita asientos en el mapa"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Volver al panel" onAction="#onVolver"/>
+    </HBox>
+
+    <HBox spacing="16.0">
+        <VBox spacing="10.0" styleClass="tarjeta" prefWidth="360.0">
+            <Label text="Salas del cine" styleClass="subtitulo"/>
+            <TableView fx:id="tblSalas" prefHeight="220.0">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="55.0"/>
+                    <TableColumn fx:id="colNombre" text="Nombre" prefWidth="105.0"/>
+                    <TableColumn fx:id="colDimensiones" text="Tamaño" prefWidth="100.0"/>
+                    <TableColumn fx:id="colCapacidad" text="Capacidad" prefWidth="85.0"/>
+                </columns>
+                <placeholder>
+                    <Label text="No hay salas registradas"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <VBox spacing="10.0" styleClass="tarjeta" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblSalaMapa" text="Selecciona una sala para ver su mapa de asientos" styleClass="subtitulo"/>
+            <HBox spacing="16.0">
+                <Label text="■ Verde: Habilitado" style="-fx-text-fill: #117864; -fx-font-weight: bold;"/>
+                <Label text="■ Rojo: Deshabilitado" style="-fx-text-fill: #922b21; -fx-font-weight: bold;"/>
+            </HBox>
+            <ScrollPane fitToWidth="true" prefHeight="195.0" style="-fx-background-color: transparent;">
+                <content>
+                    <GridPane fx:id="gridAsientos" hgap="6.0" vgap="6.0">
+                        <padding>
+                            <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+                        </padding>
+                    </GridPane>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="12.0" styleClass="tarjeta">
+        <Label text="Crear nueva sala" styleClass="subtitulo"/>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="ID:"/>
+            <TextField fx:id="txtIdSala" promptText="Ej: S04" prefWidth="85.0"/>
+            <Label text="Nombre:"/>
+            <TextField fx:id="txtNombreSala" promptText="Ej: Sala 4 VIP" prefWidth="160.0"/>
+            <Label text="Filas (1-26):"/>
+            <TextField fx:id="txtFilas" promptText="Ej: 6" prefWidth="75.0"/>
+            <Label text="Columnas:"/>
+            <TextField fx:id="txtColumnas" promptText="Ej: 10" prefWidth="75.0"/>
+            <Button text="Crear sala" onAction="#onCrearSala"/>
+        </HBox>
+        <Label fx:id="lblMensaje" text=""/>
+    </VBox>
+</VBox>

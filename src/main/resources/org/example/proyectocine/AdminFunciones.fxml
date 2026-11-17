@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="16.0" prefWidth="880.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.AdminFuncionesViewController">
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox spacing="2.0">
+            <Label text="Gestión de funciones" styleClass="titulo"/>
+            <Label text="Programa nuevos horarios en cartelera o cancela funciones activas"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Volver al panel" onAction="#onVolver"/>
+    </HBox>
+
+    <VBox spacing="10.0" styleClass="tarjeta">
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label text="Funciones registradas" styleClass="subtitulo"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Cancelar función seleccionada" onAction="#onCancelarFuncion"/>
+        </HBox>
+
+        <TableView fx:id="tblFunciones" prefHeight="210.0">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="80.0"/>
+                <TableColumn fx:id="colPelicula" text="Película" prefWidth="210.0"/>
+                <TableColumn fx:id="colSala" text="Sala" prefWidth="110.0"/>
+                <TableColumn fx:id="colFechaHora" text="Fecha y hora" prefWidth="135.0"/>
+                <TableColumn fx:id="colPrecio" text="Precio base" prefWidth="105.0"/>
+                <TableColumn fx:id="colOcupacion" text="Ocupación" prefWidth="85.0"/>
+                <TableColumn fx:id="colEstado" text="Estado" prefWidth="95.0"/>
+            </columns>
+            <placeholder>
+                <Label text="No hay funciones programadas"/>
+            </placeholder>
+        </TableView>
+    </VBox>
+
+    <VBox spacing="12.0" styleClass="tarjeta">
+        <Label text="Programar nueva función" styleClass="subtitulo"/>
+
+        <GridPane hgap="12.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="110.0"/>
+                <ColumnConstraints prefWidth="260.0"/>
+                <ColumnConstraints prefWidth="110.0"/>
+                <ColumnConstraints prefWidth="260.0"/>
+            </columnConstraints>
+
+            <Label text="ID función:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtIdFuncion" promptText="Ej: F10" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Película:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <ComboBox fx:id="cmbPelicula" promptText="Selecciona película" maxWidth="Infinity" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+            <Label text="Sala:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cmbSala" promptText="Selecciona sala" maxWidth="Infinity" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Fecha:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <DatePicker fx:id="dpFecha" maxWidth="Infinity" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+            <Label text="Hora (HH:mm):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtHora" promptText="Ej: 19:30" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Precio base ($):" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+            <TextField fx:id="txtPrecio" promptText="Ej: 15000" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+        </GridPane>
+
+        <HBox alignment="CENTER_LEFT" spacing="12.0">
+            <Button text="Programar función" onAction="#onProgramarFuncion"/>
+            <Label fx:id="lblMensaje" text=""/>
+        </HBox>
+    </VBox>
+</VBox>

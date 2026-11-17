@@ -491,6 +491,10 @@ public class CineFacade {
         return enCartelera;
     }
 
+    public ArrayList<Pelicula> obtenerTodasLasPeliculas() {
+        return new ArrayList<>(cine.getPeliculas());
+    }
+
     public ArrayList<Sala> obtenerSalas() {
         return new ArrayList<>(cine.getSalas());
     }

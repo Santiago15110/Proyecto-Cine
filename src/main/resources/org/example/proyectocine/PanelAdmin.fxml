@@ -45,12 +45,12 @@
     <Label text="Gestión" styleClass="subtitulo"/>
     <TilePane hgap="12.0" vgap="12.0" prefColumns="3" prefTileWidth="245.0">
         <Button text="Reportes y estadísticas" onAction="#onReportes" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Películas (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Salas (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Funciones (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Confitería (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Promociones (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Clientes (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Compras (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Películas" onAction="#onPeliculas" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Salas" onAction="#onSalas" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Funciones" onAction="#onFunciones" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Confitería" onAction="#onConfiteria" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Promociones" onAction="#onPromociones" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Clientes" onAction="#onClientes" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Compras" onAction="#onCompras" styleClass="boton-menu" maxWidth="Infinity"/>
     </TilePane>
 </VBox>
