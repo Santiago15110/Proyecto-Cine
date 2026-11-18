@@ -23,6 +23,7 @@ public final class DatosIniciales {
         CineFacade f = new CineFacade();
 
         f.registrarAdmin("Administrador CinemaUQ", CORREO_ADMIN, CLAVE_ADMIN, "AD-001");
+        f.registrarAdmin("Juan camilo", "juan@cinemauq.com", "12345","AD-002");
         f.registrarCliente("Ana María López", "ana@mail.com", "1234", "1094000001");
         f.registrarCliente("Luis Gómez", "luis@mail.com", "1234", "1094000002");
         f.registrarCliente("Sofía Ramírez", "sofia@mail.com", "1234", "1094000003");
