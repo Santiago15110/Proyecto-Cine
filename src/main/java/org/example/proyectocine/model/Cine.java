@@ -31,6 +31,10 @@ public class Cine {
         return instancia;
     }
 
+    static void reiniciar() {
+        instancia = null;
+    }
+
     /**
      * Registra un cliente nuevo en el sistema.
      *
