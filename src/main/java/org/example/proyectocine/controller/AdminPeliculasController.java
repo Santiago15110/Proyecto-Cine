@@ -30,4 +30,8 @@ public class AdminPeliculasController {
     public void ponerEnCartelera(String idPelicula) {
         facade.ponerEnCartelera(idPelicula);
     }
+
+    public void cambiarPoster(String idPelicula, String rutaPoster) {
+        facade.cambiarPosterPelicula(idPelicula, rutaPoster);
+    }
 }

@@ -7,10 +7,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import org.example.proyectocine.controller.AdminPeliculasController;
 import org.example.proyectocine.model.CinemaException;
 import org.example.proyectocine.model.Genero;
 import org.example.proyectocine.model.Pelicula;
+
+import java.io.File;
 
 public class AdminPeliculasViewController {
 
@@ -119,6 +122,44 @@ public class AdminPeliculasViewController {
         } catch (CinemaException e) {
             mostrarMensaje(e.getMessage(), true);
         }
+    }
+
+    @FXML
+    private void onElegirPoster() {
+        File imagen = elegirImagen();
+        if (imagen != null) {
+            txtRutaPoster.setText(imagen.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onCambiarPoster() {
+        Pelicula seleccionada = tblPeliculas.getSelectionModel().getSelectedItem();
+        if (seleccionada == null) {
+            mostrarMensaje("Selecciona una película de la tabla.", true);
+            return;
+        }
+        File imagen = elegirImagen();
+        if (imagen == null) {
+            return;
+        }
+        try {
+            controller.cambiarPoster(seleccionada.getId(), imagen.getAbsolutePath());
+            cargarTabla();
+            mostrarMensaje("Póster de \"" + seleccionada.getTitulo() + "\" actualizado.", false);
+        } catch (CinemaException e) {
+            mostrarMensaje(e.getMessage(), true);
+        }
+    }
+
+    private File elegirImagen() {
+        FileChooser selector = new FileChooser();
+        selector.setTitle("Elegir póster de la película");
+        selector.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Imágenes (*.jpg, *.jpeg, *.png)", "*.jpg", "*.jpeg", "*.png"));
+        File imagenes = new File(System.getProperty("user.home"), "Pictures");
+        selector.setInitialDirectory(imagenes.isDirectory() ? imagenes : new File(System.getProperty("user.home")));
+        return selector.showOpenDialog(tblPeliculas.getScene().getWindow());
     }
 
     private void limpiarFormulario() {

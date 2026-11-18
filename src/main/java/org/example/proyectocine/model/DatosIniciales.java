@@ -30,17 +30,17 @@ public final class DatosIniciales {
         f.iniciarSesion(CORREO_ADMIN, CLAVE_ADMIN);
 
         f.agregarPelicula("P01", "Dune: Parte Dos", Genero.CIENCIA_FICCION, "+13", 166,
-                "Paul Atreides se une a los Fremen para vengar a su familia.", null);
+                "Paul Atreides se une a los Fremen para vengar a su familia.", poster("P01"));
         f.agregarPelicula("P02", "Intensamente 2", Genero.COMEDIA, "TP", 96,
-                "Nuevas emociones llegan a la mente de Riley en su adolescencia.", null);
+                "Nuevas emociones llegan a la mente de Riley en su adolescencia.", poster("P02"));
         f.agregarPelicula("P03", "Interestelar", Genero.CIENCIA_FICCION, "+13", 169,
-                "Un grupo de exploradores viaja por un agujero de gusano para salvar a la humanidad.", null);
+                "Un grupo de exploradores viaja por un agujero de gusano para salvar a la humanidad.", poster("P03"));
         f.agregarPelicula("P04", "El Conjuro", Genero.TERROR, "+15", 112,
-                "Dos investigadores de lo paranormal ayudan a una familia aterrorizada.", null);
+                "Dos investigadores de lo paranormal ayudan a una familia aterrorizada.", poster("P04"));
         f.agregarPelicula("P05", "Gladiador II", Genero.ACCION, "+15", 148,
-                "Lucio debe entrar al Coliseo para devolverle la gloria a Roma.", null);
+                "Lucio debe entrar al Coliseo para devolverle la gloria a Roma.", poster("P05"));
         f.agregarPelicula("P06", "Wicked", Genero.FANTASIA, "TP", 160,
-                "La historia de las brujas de Oz antes de la llegada de Dorothy.", null);
+                "La historia de las brujas de Oz antes de la llegada de Dorothy.", poster("P06"));
 
         f.crearSala("S1", "Sala 1", 8, 12);
         f.crearSala("S2", "Sala 2 VIP", 6, 10);
@@ -104,6 +104,16 @@ public final class DatosIniciales {
         f.solicitarRecarga("1094000003", 20000);
 
         f.cerrarSesion();
+    }
+
+    private static String poster(String idPelicula) {
+        for (String extension : new String[]{".jpg", ".jpeg", ".png"}) {
+            String ruta = "/posters/" + idPelicula + extension;
+            if (DatosIniciales.class.getResource(ruta) != null) {
+                return ruta;
+            }
+        }
+        return null;
     }
 
     private static LocalDateTime redondear(LocalDateTime fecha) {

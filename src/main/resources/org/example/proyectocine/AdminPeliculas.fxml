@@ -33,6 +33,7 @@
         <HBox alignment="CENTER_LEFT" spacing="10.0">
             <Label text="Catálogo de películas" styleClass="subtitulo"/>
             <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Cambiar póster" onAction="#onCambiarPoster"/>
             <Button text="Retirar de cartelera" onAction="#onRetirarCartelera"/>
             <Button text="Poner en cartelera" onAction="#onPonerCartelera"/>
         </HBox>
@@ -78,8 +79,11 @@
             <Label text="Duración (min):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
             <TextField fx:id="txtDuracion" promptText="Ej: 145" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-            <Label text="Ruta póster:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
-            <TextField fx:id="txtRutaPoster" promptText="Opcional (ej: /posters/p07.png)" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+            <Label text="Póster:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+            <HBox spacing="6.0" alignment="CENTER_LEFT" GridPane.rowIndex="2" GridPane.columnIndex="3">
+                <TextField fx:id="txtRutaPoster" promptText="Opcional: elige una imagen" HBox.hgrow="ALWAYS"/>
+                <Button text="Elegir imagen…" onAction="#onElegirPoster"/>
+            </HBox>
 
             <Label text="Sinopsis:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
             <TextField fx:id="txtDescripcion" promptText="Breve descripción de la película" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3"/>

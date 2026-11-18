@@ -194,6 +194,18 @@ public class CineFacade {
         buscarPelicula(idPelicula).setEnCartelera(true);
     }
 
+    /**
+     * Cambia la imagen (póster) que se muestra de una película en la cartelera.
+     *
+     * @param idPelicula id de la película
+     * @param rutaPoster ruta de la imagen: un recurso del proyecto (ej: /posters/P01.jpg) o un archivo del equipo
+     * @throws AccesoDenegadoException si quien tiene la sesión no es administrador
+     */
+    public void cambiarPosterPelicula(String idPelicula, String rutaPoster) {
+        validarAdministrador("gestionar películas");
+        buscarPelicula(idPelicula).setRutaPoster(rutaPoster);
+    }
+
     public Sala crearSala(String id, String nombre, int filas, int columnas) {
         validarAdministrador("gestionar salas");
         Sala sala = new Sala(id, nombre, filas, columnas);
