@@ -26,7 +26,7 @@
         <Button text="← Volver al panel" onAction="#onVolver"/>
     </HBox>
 
-    <TableView fx:id="tblClientes" prefHeight="260.0">
+    <TableView fx:id="tblClientes" prefHeight="200.0">
         <columns>
             <TableColumn fx:id="colCedula" text="Cédula" prefWidth="110.0"/>
             <TableColumn fx:id="colNombre" text="Nombre" prefWidth="185.0"/>
@@ -53,5 +53,28 @@
         </HBox>
 
         <Label fx:id="lblMensaje" text=""/>
+    </VBox>
+
+    <VBox spacing="10.0" styleClass="tarjeta">
+        <Label fx:id="lblTituloSolicitudes" text="Solicitudes de recarga pendientes" styleClass="subtitulo"/>
+        <TableView fx:id="tblSolicitudes" prefHeight="140.0">
+            <columns>
+                <TableColumn fx:id="colSolFecha" text="Fecha" prefWidth="140.0"/>
+                <TableColumn fx:id="colSolCliente" text="Cliente" prefWidth="200.0"/>
+                <TableColumn fx:id="colSolCedula" text="Cédula" prefWidth="120.0"/>
+                <TableColumn fx:id="colSolMonto" text="Monto" prefWidth="120.0"/>
+                <TableColumn fx:id="colSolSaldo" text="Saldo actual" prefWidth="120.0"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <placeholder>
+                <Label text="No hay solicitudes pendientes"/>
+            </placeholder>
+        </TableView>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Button text="Aprobar y recargar" onAction="#onAprobarSolicitud" styleClass="boton-principal"/>
+            <Button text="Rechazar" onAction="#onRechazarSolicitud"/>
+        </HBox>
     </VBox>
 </VBox>

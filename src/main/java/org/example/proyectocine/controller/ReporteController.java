@@ -1,12 +1,11 @@
 package org.example.proyectocine.controller;
 
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.PieChart;
-import org.example.proyectocine.model.*;
+import org.example.proyectocine.model.CineFacade;
+import org.example.proyectocine.model.ReporteStrategy;
+import org.example.proyectocine.model.TipoReporte;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ReporteController {
@@ -17,8 +16,14 @@ public class ReporteController {
         this.cineFacade = new CineFacade();
     }
 
-    public ReporteStrategy generarReporte(String tipoReporteStr, LocalDate inicio, LocalDate fin) {
-        TipoReporte tipo = convertirATipoReporte(tipoReporteStr);
+    public List<TipoReporte> obtenerTiposReporte() {
+        return List.of(TipoReporte.values());
+    }
+
+    public ReporteStrategy generarReporte(TipoReporte tipo, LocalDate inicio, LocalDate fin) {
+        if (tipo == null) {
+            throw new IllegalArgumentException("Debe seleccionar un tipo de reporte.");
+        }
         return cineFacade.crearReporte(tipo, inicio, fin);
     }
 
@@ -34,39 +39,15 @@ public class ReporteController {
         cineFacade.exportarReportePDF(reporte, ruta);
     }
 
-    public BarChart<String, Number> construirBarChart(ReporteStrategy reporte) {
-        return ReporteVisual.crearBarChart(reporte, "Categoría / Elemento", "Valor / Monto");
-    }
-
-    public PieChart construirPieChart(ReporteStrategy reporte) {
-        return ReporteVisual.crearPieChart(reporte);
-    }
-
-    public LineChart<String, Number> construirLineChart(ReporteStrategy reporte) {
-        return ReporteVisual.crearLineChart(reporte, "Periodo", "Valor");
-    }
-
-    private TipoReporte convertirATipoReporte(String seleccion) {
-        if (seleccion == null) {
-            throw new IllegalArgumentException("Debe seleccionar un tipo de reporte.");
-        }
-        switch (seleccion) {
-            case "Reporte de Ventas":
-                return TipoReporte.VENTAS;
-            case "Reporte de Entradas por Función":
-                return TipoReporte.ENTRADAS_POR_FUNCION;
-            case "Reporte de Ocupación de Salas":
-                return TipoReporte.OCUPACION_SALAS;
-            case "Reporte de Confitería":
-                return TipoReporte.CONFITERIA;
-            case "Reporte de Recargas":
-                return TipoReporte.RECARGAS;
-            case "Reporte de Cancelaciones":
-                return TipoReporte.CANCELACIONES;
-            case "Reporte de Puntos":
-                return TipoReporte.PUNTOS;
-            default:
-                throw new IllegalArgumentException("Tipo de reporte desconocido: " + seleccion);
-        }
+    /**
+     * Nombre sugerido para guardar el archivo, por ejemplo "reporte_ventas_2026-11-17.pdf".
+     *
+     * @param tipo      tipo de reporte
+     * @param extension "txt" o "pdf"
+     * @return nombre de archivo sin espacios ni tildes
+     */
+    public String nombreSugerido(TipoReporte tipo, String extension) {
+        String fecha = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return "reporte_" + tipo.name().toLowerCase() + "_" + fecha + "." + extension;
     }
 }

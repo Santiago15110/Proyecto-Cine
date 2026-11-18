@@ -2,6 +2,7 @@ package org.example.proyectocine.controller;
 
 import org.example.proyectocine.model.CineFacade;
 import org.example.proyectocine.model.Cliente;
+import org.example.proyectocine.model.SolicitudRecarga;
 
 import java.util.ArrayList;
 
@@ -27,5 +28,17 @@ public class AdminClientesController {
 
     public void activarTarjeta(String cedula) {
         facade.activarTarjeta(cedula);
+    }
+
+    public ArrayList<SolicitudRecarga> obtenerSolicitudesPendientes() {
+        return facade.obtenerSolicitudesPendientes();
+    }
+
+    public void aprobarSolicitud(SolicitudRecarga solicitud) {
+        facade.aprobarSolicitudRecarga(solicitud.getId());
+    }
+
+    public void rechazarSolicitud(SolicitudRecarga solicitud) {
+        facade.rechazarSolicitudRecarga(solicitud.getId());
     }
 }

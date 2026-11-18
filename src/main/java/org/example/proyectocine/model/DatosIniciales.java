@@ -100,6 +100,9 @@ public final class DatosIniciales {
         f.bloquearTarjeta("1094000003");
         f.cancelarFuncion("F08");
 
+        f.solicitarRecarga("1094000002", 30000);
+        f.solicitarRecarga("1094000003", 20000);
+
         f.cerrarSesion();
     }
 

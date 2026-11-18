@@ -9,15 +9,19 @@ import javafx.scene.control.TextField;
 import org.example.proyectocine.controller.AdminClientesController;
 import org.example.proyectocine.model.CinemaException;
 import org.example.proyectocine.model.Cliente;
+import org.example.proyectocine.model.SolicitudRecarga;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class AdminClientesViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
             new DecimalFormat("$ #,##0", DecimalFormatSymbols.getInstance(Locale.of("es", "CO")));
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @FXML private TableView<Cliente> tblClientes;
     @FXML private TableColumn<Cliente, String> colCedula;
@@ -30,6 +34,14 @@ public class AdminClientesViewController {
     @FXML private Label lblClienteSeleccionado;
     @FXML private TextField txtMontoRecarga;
     @FXML private Label lblMensaje;
+
+    @FXML private Label lblTituloSolicitudes;
+    @FXML private TableView<SolicitudRecarga> tblSolicitudes;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolFecha;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolCliente;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolCedula;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolMonto;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolSaldo;
 
     private final AdminClientesController controller = new AdminClientesController();
 
@@ -54,7 +66,58 @@ public class AdminClientesViewController {
             }
         });
 
+        colSolFecha.setCellValueFactory(dato -> new SimpleStringProperty(
+                dato.getValue().getFechaSolicitud().format(FORMATO_FECHA)));
+        colSolCliente.setCellValueFactory(dato -> new SimpleStringProperty(dato.getValue().getCliente().getNombre()));
+        colSolCedula.setCellValueFactory(dato -> new SimpleStringProperty(dato.getValue().getCliente().getCedula()));
+        colSolMonto.setCellValueFactory(dato -> new SimpleStringProperty(FORMATO_PESOS.format(dato.getValue().getMonto())));
+        colSolSaldo.setCellValueFactory(dato -> new SimpleStringProperty(
+                FORMATO_PESOS.format(dato.getValue().getCliente().getTheTarjeta().getSaldo())));
+
         cargarTabla();
+        cargarSolicitudes();
+    }
+
+    private void cargarSolicitudes() {
+        ArrayList<SolicitudRecarga> pendientes = controller.obtenerSolicitudesPendientes();
+        tblSolicitudes.getItems().setAll(pendientes);
+        lblTituloSolicitudes.setText(pendientes.isEmpty()
+                ? "Solicitudes de recarga pendientes"
+                : "Solicitudes de recarga pendientes (" + pendientes.size() + ")");
+    }
+
+    @FXML
+    private void onAprobarSolicitud() {
+        SolicitudRecarga solicitud = tblSolicitudes.getSelectionModel().getSelectedItem();
+        if (solicitud == null) {
+            mostrarMensaje("Selecciona una solicitud de la lista.", true);
+            return;
+        }
+        try {
+            controller.aprobarSolicitud(solicitud);
+            cargarTabla();
+            cargarSolicitudes();
+            mostrarMensaje("Solicitud aprobada: se recargaron " + FORMATO_PESOS.format(solicitud.getMonto())
+                    + " a " + solicitud.getCliente().getNombre(), false);
+        } catch (CinemaException | IllegalArgumentException e) {
+            mostrarMensaje(e.getMessage(), true);
+        }
+    }
+
+    @FXML
+    private void onRechazarSolicitud() {
+        SolicitudRecarga solicitud = tblSolicitudes.getSelectionModel().getSelectedItem();
+        if (solicitud == null) {
+            mostrarMensaje("Selecciona una solicitud de la lista.", true);
+            return;
+        }
+        try {
+            controller.rechazarSolicitud(solicitud);
+            cargarSolicitudes();
+            mostrarMensaje("Solicitud de " + solicitud.getCliente().getNombre() + " rechazada.", false);
+        } catch (CinemaException e) {
+            mostrarMensaje(e.getMessage(), true);
+        }
     }
 
     private void cargarTabla() {

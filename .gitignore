@@ -37,3 +37,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+### Reportes generados por la app ###
+reporte_*.txt
+reporte_*.pdf

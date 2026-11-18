@@ -127,6 +127,10 @@ public class CineFacade {
      */
     public void recargarTarjeta(String cedula, double monto) {
         validarAdministrador("recargar tarjetas");
+        recargarConPasarela(cedula, monto, "Recarga realizada por el administrador");
+    }
+
+    private void recargarConPasarela(String cedula, double monto, String descripcion) {
         TarjetaVirtual tarjeta = buscarCliente(cedula).getTheTarjeta();
         if (monto <= 0) {
             throw new IllegalArgumentException("El monto a recargar debe ser mayor a 0");
@@ -134,7 +138,7 @@ public class CineFacade {
         if (!pasarela.procesarPago(tarjeta.getNumero(), monto)) {
             throw new CinemaException("La pasarela de pago rechazó la recarga");
         }
-        tarjeta.recargar(monto, "Recarga realizada por el administrador");
+        tarjeta.recargar(monto, descripcion);
     }
 
     public void bloquearTarjeta(String cedula) {
@@ -479,6 +483,63 @@ public class CineFacade {
         }
         resultado.sort((a, b) -> b.getFechaSolicitud().compareTo(a.getFechaSolicitud()));
         return resultado;
+    }
+
+    /**
+     * Solicitudes de recarga que esperan respuesta del administrador, de la más antigua a la más reciente.
+     *
+     * @return solicitudes pendientes
+     * @throws AccesoDenegadoException si quien tiene la sesión no es administrador
+     */
+    public ArrayList<SolicitudRecarga> obtenerSolicitudesPendientes() {
+        validarAdministrador("consultar solicitudes de recarga");
+        ArrayList<SolicitudRecarga> pendientes = new ArrayList<>();
+        for (SolicitudRecarga s : cine.getSolicitudesRecarga()) {
+            if (s.estaPendiente()) {
+                pendientes.add(s);
+            }
+        }
+        pendientes.sort((a, b) -> a.getFechaSolicitud().compareTo(b.getFechaSolicitud()));
+        return pendientes;
+    }
+
+    /**
+     * El administrador aprueba una solicitud: la recarga se procesa con la pasarela y se suma al saldo.
+     * Si la pasarela la rechaza, la solicitud sigue pendiente.
+     *
+     * @param idSolicitud id de la solicitud
+     * @throws AccesoDenegadoException si quien tiene la sesión no es administrador
+     * @throws CinemaException         si la solicitud no existe, ya fue respondida o la pasarela rechaza el pago
+     */
+    public void aprobarSolicitudRecarga(String idSolicitud) {
+        validarAdministrador("aprobar solicitudes de recarga");
+        SolicitudRecarga solicitud = buscarSolicitudPendiente(idSolicitud);
+        recargarConPasarela(solicitud.getCliente().getCedula(), solicitud.getMonto(),
+                "Recarga aprobada (solicitud " + solicitud.getId() + ")");
+        solicitud.aprobar();
+    }
+
+    /**
+     * El administrador rechaza una solicitud; el saldo del cliente no cambia.
+     *
+     * @param idSolicitud id de la solicitud
+     * @throws AccesoDenegadoException si quien tiene la sesión no es administrador
+     * @throws CinemaException         si la solicitud no existe o ya fue respondida
+     */
+    public void rechazarSolicitudRecarga(String idSolicitud) {
+        validarAdministrador("rechazar solicitudes de recarga");
+        buscarSolicitudPendiente(idSolicitud).rechazar();
+    }
+
+    private SolicitudRecarga buscarSolicitudPendiente(String id) {
+        SolicitudRecarga solicitud = cine.buscarSolicitudRecarga(id);
+        if (solicitud == null) {
+            throw new CinemaException("No existe una solicitud de recarga con el id " + id);
+        }
+        if (!solicitud.estaPendiente()) {
+            throw new CinemaException("La solicitud " + id + " ya fue " + solicitud.getEstado().getNombre().toLowerCase());
+        }
+        return solicitud;
     }
 
     public ArrayList<String> obtenerNotificaciones(String cedula) {
