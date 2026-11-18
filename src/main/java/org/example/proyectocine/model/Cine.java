@@ -13,6 +13,7 @@ public class Cine {
     private final ArrayList<Compra> listCompras = new ArrayList<>();
     private final ArrayList<ItemConfiteria> listConfiteria = new ArrayList<>();
     private final ArrayList<Promocion> listPromociones = new ArrayList<>();
+    private final ArrayList<SolicitudRecarga> listSolicitudesRecarga = new ArrayList<>();
 
     private Usuario usuarioActual;
 
@@ -334,6 +335,32 @@ public class Cine {
             }
         }
         return resultado;
+    }
+
+    /**
+     * Guarda una solicitud de recarga hecha por un cliente.
+     *
+     * @param solicitud solicitud a guardar
+     * @throws CinemaException si ya existe una solicitud con el mismo id
+     */
+    public void agregarSolicitudRecarga(SolicitudRecarga solicitud) {
+        if (buscarSolicitudRecarga(solicitud.getId()) != null) {
+            throw new CinemaException("Ya existe una solicitud de recarga con el id " + solicitud.getId());
+        }
+        listSolicitudesRecarga.add(solicitud);
+    }
+
+    public SolicitudRecarga buscarSolicitudRecarga(String id) {
+        for (SolicitudRecarga s : listSolicitudesRecarga) {
+            if (s.getId().equals(id)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<SolicitudRecarga> getSolicitudesRecarga() {
+        return listSolicitudesRecarga;
     }
 
     /**

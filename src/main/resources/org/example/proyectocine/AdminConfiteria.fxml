@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="14.0" prefWidth="900.0" styleClass="raiz" stylesheets="@estilos.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.proyectocine.viewController.AdminConfiteriaViewController">
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox spacing="2.0">
+            <Label text="Gestión de confitería" styleClass="titulo"/>
+            <Label text="Crea productos individuales y arma combos compuestos con descuento"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="← Volver al panel" onAction="#onVolver"/>
+    </HBox>
+
+    <TableView fx:id="tblConfiteria" prefHeight="175.0">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="95.0"/>
+            <TableColumn fx:id="colNombre" text="Nombre" prefWidth="280.0"/>
+            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="120.0"/>
+            <TableColumn fx:id="colPrecio" text="Precio" prefWidth="150.0"/>
+            <TableColumn fx:id="colPuntos" text="Costo puntos" prefWidth="150.0"/>
+        </columns>
+        <placeholder>
+            <Label text="No hay productos ni combos registrados"/>
+        </placeholder>
+    </TableView>
+
+    <HBox spacing="14.0">
+        <VBox spacing="10.0" styleClass="tarjeta" prefWidth="360.0">
+            <Label text="Nuevo producto individual" styleClass="subtitulo"/>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="ID:" prefWidth="75.0"/>
+                <TextField fx:id="txtIdProd" promptText="Ej: P05" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="Nombre:" prefWidth="75.0"/>
+                <TextField fx:id="txtNombreProd" promptText="Ej: Nachos con queso" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="Precio ($):" prefWidth="75.0"/>
+                <TextField fx:id="txtPrecioProd" promptText="Ej: 14000" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="Puntos:" prefWidth="75.0"/>
+                <TextField fx:id="txtPuntosProd" promptText="Ej: 14" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <Button text="Crear producto" onAction="#onCrearProducto" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="10.0" styleClass="tarjeta" HBox.hgrow="ALWAYS">
+            <Label text="Nuevo combo (Composite)" styleClass="subtitulo"/>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="ID:"/>
+                <TextField fx:id="txtIdCombo" promptText="Ej: C03" prefWidth="80.0"/>
+                <Label text="Nombre:"/>
+                <TextField fx:id="txtNombreCombo" promptText="Ej: Combo Pareja" HBox.hgrow="ALWAYS"/>
+                <Label text="Desc (%):"/>
+                <TextField fx:id="txtDescuentoCombo" promptText="15" prefWidth="55.0"/>
+            </HBox>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <ComboBox fx:id="cmbItemAgregar" promptText="Selecciona ítem para agregar" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button text="+ Añadir" onAction="#onAgregarItemACombo"/>
+                <Button text="Limpiar" onAction="#onLimpiarListaCombo"/>
+            </HBox>
+            <ListView fx:id="lstItemsCombo" prefHeight="70.0">
+                <placeholder>
+                    <Label text="Agrega productos o combos arriba"/>
+                </placeholder>
+            </ListView>
+            <Button text="Crear combo" onAction="#onCrearCombo" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <Label fx:id="lblMensaje" text=""/>
+</VBox>

@@ -36,6 +36,42 @@ public class PanelAdminViewController {
     }
 
     @FXML
+    private void onClientes() {
+        SceneManager.cambiarA(Vista.ADMIN_CLIENTES);
+    }
+
+    @FXML
+    private void onFunciones() {
+        SceneManager.cambiarA(Vista.ADMIN_FUNCIONES);
+    }
+
+    @FXML
+    private void onPeliculas() {
+        SceneManager.cambiarA(Vista.ADMIN_PELICULAS);
+    }
+
+    @FXML
+    private void onSalas() {
+        SceneManager.cambiarA(Vista.ADMIN_SALAS);
+    }
+
+    @FXML
+    private void onConfiteria() {
+        SceneManager.cambiarA(Vista.ADMIN_CONFITERIA);
+    }
+
+    @FXML
+    private void onPromociones() {
+        SceneManager.cambiarA(Vista.ADMIN_PROMOCIONES);
+    }
+
+    @FXML
+    private void onCompras() {
+        SceneManager.cambiarA(Vista.ADMIN_COMPRAS);
+    }
+
+
+    @FXML
     private void onReportes() {
         SceneManager.cambiarA(Vista.REPORTES);
     }

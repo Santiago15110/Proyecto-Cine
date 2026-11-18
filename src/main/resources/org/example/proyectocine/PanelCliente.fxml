@@ -46,7 +46,7 @@
     <TilePane hgap="12.0" vgap="12.0" prefColumns="3" prefTileWidth="245.0">
         <Button text="Cartelera y compra" onAction="#onCartelera" styleClass="boton-menu" maxWidth="Infinity"/>
         <Button text="Mi tarjeta y puntos" onAction="#onMiTarjeta" styleClass="boton-menu" maxWidth="Infinity"/>
-        <Button text="Mis compras (próximamente)" disable="true" styleClass="boton-menu" maxWidth="Infinity"/>
+        <Button text="Mis compras" onAction="#onMisCompras" styleClass="boton-menu" maxWidth="Infinity"/>
     </TilePane>
 
     <VBox spacing="8.0" styleClass="tarjeta">

@@ -1,0 +1,11 @@
+Reporte de Puntos CinemaUQ - CinemaUQ
+Fecha de generación: 17/11/2026
+
+Cédula          Cliente                Puntos Acum.    Puntos Redim.  
+
+1094000001      Ana María López        1081            0              
+1094000002      Luis Gómez             189             150            
+1094000003      Sofía Ramírez          31              0              
+
+Total general puntos acumulados: 1301
+Total general puntos redimidos:  150

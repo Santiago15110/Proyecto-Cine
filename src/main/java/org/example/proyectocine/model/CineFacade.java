@@ -407,8 +407,78 @@ public class CineFacade {
         }
     }
 
+    /**
+     * Calcula qué porcentaje se devolvería si se cancelara la compra ahora, sin cancelarla.
+     *
+     * @param idCompra id de la compra
+     * @return porcentaje a devolver (100 u 80)
+     * @throws CancelacionNoPermitidaException si la compra ya está cancelada o faltan menos de 2 horas
+     */
+    public double consultarPorcentajeReembolso(String idCompra) {
+        Compra compra = buscarCompra(idCompra);
+        if (!(compra.getEstado() instanceof EstadoPagada)) {
+            throw new CancelacionNoPermitidaException("La compra " + idCompra + " ya está cancelada");
+        }
+        return politicaReembolso.porcentajeReembolso(compra.getFuncion(), LocalDateTime.now());
+    }
+
+    /**
+     * El cliente cancela una de sus compras. Verifica que la compra sea suya
+     * y después aplica la política de reembolso de {@link #cancelarCompra(String)}.
+     *
+     * @param cedula   cédula del cliente que cancela
+     * @param idCompra id de la compra
+     * @throws AccesoDenegadoException         si la compra es de otro cliente
+     * @throws CancelacionNoPermitidaException si ya está cancelada o faltan menos de 2 horas
+     */
+    public void cancelarCompraCliente(String cedula, String idCompra) {
+        Cliente cliente = buscarCliente(cedula);
+        Compra compra = buscarCompra(idCompra);
+        if (!compra.getCliente().equals(cliente)) {
+            throw new AccesoDenegadoException("La compra " + idCompra + " no pertenece a este cliente");
+        }
+        if (!(compra.getEstado() instanceof EstadoPagada)) {
+            throw new CancelacionNoPermitidaException("La compra " + idCompra + " ya está cancelada");
+        }
+        cancelarCompra(idCompra);
+    }
+
     public ArrayList<Compra> historialCliente(String cedula) {
         return cine.comprasDeCliente(buscarCliente(cedula));
+    }
+
+    // ===================== SOLICITUDES DE RECARGA =====================
+
+    /**
+     * El cliente pide una recarga. El saldo no cambia hasta que un administrador la apruebe.
+     *
+     * @param cedula cédula del cliente
+     * @param monto  monto a recargar
+     * @return la solicitud creada, en estado pendiente
+     */
+    public SolicitudRecarga solicitarRecarga(String cedula, double monto) {
+        Cliente cliente = buscarCliente(cedula);
+        SolicitudRecarga solicitud = new SolicitudRecarga(generarId("SR"), cliente, monto, LocalDateTime.now());
+        cine.agregarSolicitudRecarga(solicitud);
+        return solicitud;
+    }
+
+    /**
+     * Solicitudes de recarga de un cliente, de la más reciente a la más antigua.
+     *
+     * @param cedula cédula del cliente
+     * @return solicitudes del cliente
+     */
+    public ArrayList<SolicitudRecarga> obtenerSolicitudesCliente(String cedula) {
+        Cliente cliente = buscarCliente(cedula);
+        ArrayList<SolicitudRecarga> resultado = new ArrayList<>();
+        for (SolicitudRecarga s : cine.getSolicitudesRecarga()) {
+            if (s.getCliente().equals(cliente)) {
+                resultado.add(s);
+            }
+        }
+        resultado.sort((a, b) -> b.getFechaSolicitud().compareTo(a.getFechaSolicitud()));
+        return resultado;
     }
 
     public ArrayList<String> obtenerNotificaciones(String cedula) {
@@ -489,6 +559,10 @@ public class CineFacade {
             }
         }
         return enCartelera;
+    }
+
+    public ArrayList<Pelicula> obtenerTodasLasPeliculas() {
+        return new ArrayList<>(cine.getPeliculas());
     }
 
     public ArrayList<Sala> obtenerSalas() {

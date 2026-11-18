@@ -3,14 +3,18 @@ package org.example.proyectocine.viewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.example.proyectocine.controller.TarjetaController;
 import org.example.proyectocine.model.AcumulacionPunto;
+import org.example.proyectocine.model.CinemaException;
 import org.example.proyectocine.model.Cliente;
 import org.example.proyectocine.model.MovimientoSaldo;
 import org.example.proyectocine.model.RegistroPuntos;
+import org.example.proyectocine.model.SolicitudRecarga;
 import org.example.proyectocine.model.TarjetaVirtual;
 
 import java.text.DecimalFormat;
@@ -19,12 +23,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class TarjetaViewController {
+public class
+TarjetaViewController {
 
     private static final DecimalFormat FORMATO_PESOS =
             new DecimalFormat("$ #,##0", DecimalFormatSymbols.getInstance(Locale.of("es", "CO")));
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private static final DateTimeFormatter FORMATO_FECHA_HORA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @FXML private Label lblSinSesion;
     @FXML private VBox contenido;
@@ -53,6 +59,15 @@ public class TarjetaViewController {
     @FXML private TableColumn<RegistroPuntos, String> colPtsEstado;
     @FXML private TableColumn<RegistroPuntos, String> colPtsOrigen;
 
+    @FXML private TextField txtMontoRecarga;
+    @FXML private Label lblMensajeRecarga;
+    @FXML private Tab tabSolicitudes;
+    @FXML private TableView<SolicitudRecarga> tblSolicitudes;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolFecha;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolMonto;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolEstado;
+    @FXML private TableColumn<SolicitudRecarga, String> colSolRespuesta;
+
     private final TarjetaController tarjetaController = new TarjetaController();
 
     private Cliente cliente;
@@ -74,6 +89,13 @@ public class TarjetaViewController {
         colPtsOrigen.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getReferencia() == null || c.getValue().getReferencia().isBlank()
                         ? "-" : c.getValue().getReferencia()));
+
+        colSolFecha.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getFechaSolicitud().format(FORMATO_FECHA_HORA)));
+        colSolMonto.setCellValueFactory(c -> new SimpleStringProperty(FORMATO_PESOS.format(c.getValue().getMonto())));
+        colSolEstado.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getEstado().getNombre()));
+        colSolRespuesta.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getFechaRespuesta() == null
+                ? "-" : c.getValue().getFechaRespuesta().format(FORMATO_FECHA_HORA)));
 
         mostrarCliente(tarjetaController.obtenerClienteEnSesion());
     }
@@ -100,6 +122,34 @@ public class TarjetaViewController {
         Navegacion.irAlPanel();
     }
 
+    @FXML
+    private void onSolicitarRecarga() {
+        if (cliente == null) {
+            return;
+        }
+        try {
+            double monto = tarjetaController.convertirMonto(txtMontoRecarga.getText());
+            tarjetaController.solicitarRecarga(cliente, monto);
+            txtMontoRecarga.clear();
+            actualizarSolicitudes();
+            tabSolicitudes.getTabPane().getSelectionModel().select(tabSolicitudes);
+            mostrarMensajeRecarga("Solicitud enviada por " + FORMATO_PESOS.format(monto)
+                    + ". Tu saldo se actualizará cuando el administrador la apruebe.", false);
+        } catch (CinemaException | IllegalArgumentException e) {
+            mostrarMensajeRecarga(e.getMessage(), true);
+        }
+    }
+
+    private void actualizarSolicitudes() {
+        tblSolicitudes.getItems().setAll(tarjetaController.obtenerSolicitudes(cliente));
+    }
+
+    private void mostrarMensajeRecarga(String texto, boolean esError) {
+        lblMensajeRecarga.getStyleClass().removeAll("mensaje-error", "mensaje-exito");
+        lblMensajeRecarga.getStyleClass().add(esError ? "mensaje-error" : "mensaje-exito");
+        lblMensajeRecarga.setText(texto);
+    }
+
     private void actualizarDatos() {
         TarjetaVirtual tarjeta = tarjetaController.obtenerTarjeta(cliente);
         AcumulacionPunto puntos = tarjetaController.obtenerPuntos(cliente);
@@ -112,7 +162,7 @@ public class TarjetaViewController {
         if (tarjeta.isActiva()) {
             lblEstado.setText("ACTIVA");
             lblEstado.getStyleClass().add("estado-activa");
-            lblAviso.setText("¿Necesitas más saldo? Las recargas las realiza el administrador del cine.");
+            lblAviso.setText("¿Necesitas más saldo? Solicita una recarga y el administrador del cine la aprobará.");
         } else {
             lblEstado.setText("BLOQUEADA");
             lblEstado.getStyleClass().add("estado-bloqueada");
@@ -127,6 +177,7 @@ public class TarjetaViewController {
 
         tblMovimientos.getItems().setAll(tarjetaController.obtenerMovimientosRecientes(cliente));
         tblPuntos.getItems().setAll(tarjetaController.obtenerHistorialPuntos(cliente));
+        actualizarSolicitudes();
     }
 
     private String estadoPuntos(RegistroPuntos registro) {

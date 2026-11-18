@@ -55,6 +55,11 @@ public class PanelClienteViewController {
     }
 
     @FXML
+    private void onMisCompras() {
+        SceneManager.cambiarA(Vista.MIS_COMPRAS);
+    }
+
+    @FXML
     private void onCerrarSesion() {
         panelController.cerrarSesion();
         SceneManager.cambiarA(Vista.BIENVENIDA);
